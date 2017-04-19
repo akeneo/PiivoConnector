@@ -1,5 +1,5 @@
 {
-    "name": "akeneo-labs/extended-api-bundle",
+    "name": "akeneo/extended-api-bundle",
     "type": "symfony-bundle",
     "description": "Akeneo PIM Extended API bundle",
     "keywords": ["pim", "akeneo", "API"],
