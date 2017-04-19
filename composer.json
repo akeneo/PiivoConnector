@@ -31,9 +31,8 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "Pim\\Bundle\\ExtendedAPIBundle\\": ""
         }
-    },
-    "target-dir": "Pim/Bundle/ExtendedAPIBundle"
+    }
 }
