@@ -1,0 +1,39 @@
+{
+    "name": "akeneo-labs/extended-api-bundle",
+    "type": "symfony-bundle",
+    "description": "Akeneo PIM Extended API bundle",
+    "keywords": ["pim", "akeneo", "API"],
+    "homepage": "http://www.akeneo.com",
+    "license": "OSL-3.0",
+    "authors": [
+        {
+            "name": "Akeneo",
+            "homepage": "http://www.akeneo.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/akeneo/pim-community-dev.git",
+            "branch": "master"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "akeneo/pim-community-dev": "1.7.*"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "3.0.0",
+        "friendsofphp/php-cs-fixer": "@stable",
+        "phpunit/phpunit": "5.4"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": {
+            "Pim\\Bundle\\ExtendedAPIBundle\\": ""
+        }
+    },
+    "target-dir": "Pim/Bundle/ExtendedAPIBundle"
+}
