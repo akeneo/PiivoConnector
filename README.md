@@ -1,4 +1,4 @@
-# ExtendedAPIBundle
+# PiivoConnectorBundle
 
 This extension purpose new API possibilities.
 We are trying to create this extension to add more features on the current version but keep in mind we don't engage on its stability.
@@ -6,7 +6,7 @@ We are trying to create this extension to add more features on the current versi
 
 ## Requirements
 
-| ExtendedAPIBundle   | Akeneo PIM Community Edition |
+| PiiVO Connector     | Akeneo PIM Community Edition |
 |:-------------------:|:----------------------------:|
 | v1.0.*              | v1.7.*                       |
 
@@ -14,7 +14,7 @@ We are trying to create this extension to add more features on the current versi
 You can install this bundle with composer (see requirements section):
 
 ```bash
-    php composer.phar require akeneo/extended-api-bundle:1.0.*
+    php composer.phar require akeneo/piivo-connector:1.0.*
 ```
 
 and enable the bundle in the `app/AppKernel.php` file in the `registerBundles()` method:
@@ -22,7 +22,7 @@ and enable the bundle in the `app/AppKernel.php` file in the `registerBundles()`
 ```php
     $bundles = [
         // ...
-        new Pim\Bundle\CustomEntityBundle\PimCustomEntityBundle(),
+        new Piivo\Bundle\ConnectorBundle\PiivoConnectorBundle(),
     ]
 ```
 
