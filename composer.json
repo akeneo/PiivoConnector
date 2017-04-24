@@ -32,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Pim\\Bundle\\PiivoConnectorBundle\\": ""
+            "Piivo\\Bundle\\ConnectorBundle\\": ""
         }
     }
 }
