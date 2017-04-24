@@ -1,7 +1,7 @@
 {
-    "name": "akeneo/extended-api-bundle",
+    "name": "akeneo/piivo-connector",
     "type": "symfony-bundle",
-    "description": "Akeneo PIM Extended API bundle",
+    "description": "Extended API to connect with PiiVO DAM",
     "keywords": ["pim", "akeneo", "API"],
     "homepage": "http://www.akeneo.com",
     "license": "OSL-3.0",
@@ -32,7 +32,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Pim\\Bundle\\ExtendedAPIBundle\\": ""
+            "Pim\\Bundle\\PiivoConnectorBundle\\": ""
         }
     }
 }
