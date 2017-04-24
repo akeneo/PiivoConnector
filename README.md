@@ -1,4 +1,4 @@
-# PiivoConnectorBundle
+# PiiVO Connector
 
 This extension purposes new API possibilities to connect PiiVO DAM with Akeneo PIM.
 We are trying to create this extension to add more features on the current version but keep in mind we don't engage on its stability.
