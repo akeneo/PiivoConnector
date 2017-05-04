@@ -10,8 +10,8 @@ def launchUnitTests = "yes"
 def launchIntegrationTests = "yes"
 
 class Globals {
-    static pimVersion = "1.5"
-    static extensionBranch = "dev-1.2"
+    static pimVersion = "1.7"
+    static extensionBranch = "dev-master"
     static phpVersion = "5.6"
     static mysqlVersion = "5.5"
 }
@@ -38,14 +38,14 @@ stage("Checkout") {
     node {
         deleteDir()
         checkout scm
-        stash "extended_api_bundle"
+        stash "piivo_connector"
 
         checkout([
             $class: 'GitSCM',
             branches: [[name: "${Globals.pimVersion}"]],
-            userRemoteConfigs: [[credentialsId: 'github-credentials', url: 'https://github.com/akeneo/pim-enterprise-standard.git']]
+            userRemoteConfigs: [[credentialsId: 'github-credentials', url: 'https://github.com/akeneo/pim-community-standard.git']]
         ])
-        stash "pim_enterprise"
+        stash "pim_community"
     }
 }
 
@@ -82,7 +82,7 @@ def runPhpCsFixerTest(phpVersion) {
         deleteDir()
         try {
             docker.image("carcel/php:${phpVersion}").inside("-v /home/akeneo/.composer:/home/akeneo/.composer -e COMPOSER_HOME=/home/akeneo/.composer") {
-                unstash "extended_api_bundle"
+                unstash "piivo_connector"
 
                 sh "php -d memory_limit=4G /usr/local/bin/composer install --optimize-autoloader --no-interaction --no-progress --prefer-dist"
 
@@ -106,7 +106,7 @@ def runPhpSpecTest(phpVersion) {
         deleteDir()
         try {
             docker.image("carcel/php:${phpVersion}").inside("-v /home/akeneo/.composer:/home/akeneo/.composer -e COMPOSER_HOME=/home/akeneo/.composer") {
-                unstash "extended_api_bundle"
+                unstash "piivo_connector"
 
                 sh "composer require --no-update akeneo/pim-community-dev:${Globals.pimVersion}"
                 sh "composer require --no-update --prefer-dist doctrine/mongodb-odm-bundle 3.0.1"
@@ -134,23 +134,22 @@ def runPhpUnitTest(phpVersion, storage) {
             docker.image("mongo:2.4").withRun("--name mongodb", "--smallfiles") {
                 docker.image("mysql:5.5").withRun("--name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_USER=akeneo_pim -e MYSQL_PASSWORD=akeneo_pim -e MYSQL_DATABASE=akeneo_pim") {
                     docker.image("carcel/php:${phpVersion}").inside("--link mysql:mysql --link mongodb:mongodb -v /home/akeneo/.composer:/home/akeneo/.composer -e COMPOSER_HOME=/home/akeneo/.composer") {
-                        unstash "pim_enterprise"
+                        unstash "pim_community"
 
-                        sh "composer require --no-update phpunit/phpunit:5.4 akeneo/extended-api-bundle:${Globals.extensionBranch}"
+                        sh "composer require --no-update phpunit/phpunit:5.4 akeneo/piivo-connector:${Globals.extensionBranch}"
                         if ('odm' == storage) {
                             sh "composer require --no-update --prefer-dist doctrine/mongodb-odm-bundle 3.0.1"
                         }
                         sh "php -d memory_limit=4G /usr/local/bin/composer update --ignore-platform-reqs --optimize-autoloader --no-interaction --no-progress --prefer-dist"
 
-                        def extensionPath = "vendor/akeneo/extended-api-bundle/Pim/Bundle/ExtendedAPIBundle"
+                        def extensionPath = "vendor/akeneo/inner-variation-bundle/Piivo/Bundle/ConnectorBundle"
                         dir(extensionPath) {
                             deleteDir()
-                            unstash "extended_api_bundle"
+                            unstash "piivo_connector"
                         }
                         sh "composer dump-autoload -o"
 
-                        sh "sed -i 's#// your app bundles should be registered here#\\0\\nnew Pim\\\\Bundle\\\\ExtendedAPIBundle\\\\PimExtendedAPIBundle(),#' app/AppKernel.php"
-
+                        sh "sed -i 's#// your app bundles should be registered here#\\0\\nnew Piivo\\\\Bundle\\\\ConnectorBundle\\\\PiiVoConnectorBundle(),#' app/AppKernel.php"
                         sh "sed -i 's/database_host:     localhost/database_host:     mysql/' app/config/parameters_test.yml"
 
                         if ('odm' == storage) {
@@ -178,4 +177,3 @@ def runPhpUnitTest(phpVersion, storage) {
         }
     }
 }
-
