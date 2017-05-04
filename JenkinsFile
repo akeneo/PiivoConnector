@@ -142,7 +142,7 @@ def runPhpUnitTest(phpVersion, storage) {
                         }
                         sh "php -d memory_limit=4G /usr/local/bin/composer update --ignore-platform-reqs --optimize-autoloader --no-interaction --no-progress --prefer-dist"
 
-                        def extensionPath = "vendor/akeneo/inner-variation-bundle/Piivo/Bundle/ConnectorBundle"
+                        def extensionPath = "vendor/akeneo/piivo-connector/Piivo/Bundle/ConnectorBundle"
                         dir(extensionPath) {
                             deleteDir()
                             unstash "piivo_connector"
@@ -164,7 +164,7 @@ def runPhpUnitTest(phpVersion, storage) {
                         sh "rm ./app/cache/* -rf"
                         sh "./app/console --env=test pim:install --force -vvv"
                         sh "mkdir -p app/build/logs/"
-                        sh "./bin/phpunit -c app/ --log-junit app/build/logs/phpunit.xml ${extensionPath}/Tests"
+                        sh "./bin/phpunit -c ${extensionPath} --log-junit app/build/logs/phpunit.xml ${extensionPath}/Tests"
                     }
                 }
             }
