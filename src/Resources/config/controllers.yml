@@ -1,0 +1,2 @@
+parameters:
+    pim_api.controller.category.class: Piivo\Bundle\ConnectorBundle\Controller\CategoryController

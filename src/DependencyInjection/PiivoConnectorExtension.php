@@ -4,8 +4,8 @@ namespace Piivo\Bundle\ConnectorBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\Routing\Loader\YamlFileLoader;
 
 /**
  *
@@ -16,10 +16,7 @@ class PiivoConnectorExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        var_dump('POUIC');
-        $routingLoader = new YamlFileLoader(new FileLocator(__DIR__ . '/../Resources/config/routing'));
-        $routingLoader->load('test.yml');
-
-
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('controllers.yml');
     }
 }
