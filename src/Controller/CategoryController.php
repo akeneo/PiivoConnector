@@ -49,7 +49,7 @@ class CategoryController extends BaseApiCategoryController
 
         $offset = $queryParameters['limit'] * ($queryParameters['page'] - 1);
         $order = ['root' => 'ASC', 'left' => 'ASC'];
-        $categories = $this->repository->searchAfterOffset([], $order, $queryParameters['limit'], $offset);
+        $categories = $this->repository->searchAfterOffset($criterias, $order, $queryParameters['limit'], $offset);
 
         $parameters = [
             'query_parameters'    => $queryParameters,
@@ -156,7 +156,7 @@ class CategoryController extends BaseApiCategoryController
         }
 
         return [
-            'parent' => $searchParameters['parent'][0]['value']
+            'parent' => $searchParameters['parent'][0]
         ];
     }
 }

@@ -2,14 +2,15 @@
 
 namespace Piivo\Bundle\ConnectorBundle\tests\integration\Controller\Category;
 
-use Akeneo\Component\Classification\Model\Category;
 use Akeneo\Test\Integration\Configuration;
 use Pim\Bundle\ApiBundle\tests\integration\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class ListCategoryIntegration extends ApiTestCase
 {
-
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         static::bootKernel();
@@ -24,19 +25,20 @@ class ListCategoryIntegration extends ApiTestCase
         $this->loadCategory(['code' => 'leaf3', 'parent' => 'tree2']);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function tearDown()
     {
         $this->removeCategory('tree1');
         $this->removeCategory('tree2');
-        $this->removeCategory('parent1');
-        $this->removeCategory('parent2');
-        $this->removeCategory('leaf1');
-        $this->removeCategory('leaf2');
-        $this->removeCategory('leaf3');
 
         parent::tearDown();
     }
 
+    /**
+     * @param array $data
+     */
     protected function loadCategory(array $data)
     {
         $category = $this->get('pim_catalog.factory.category')->create();
@@ -44,27 +46,29 @@ class ListCategoryIntegration extends ApiTestCase
         $this->get('pim_catalog.saver.category')->save($category, ['flush' => false]);
     }
 
+    /**
+     * @param string $code
+     */
     protected function removeCategory($code)
     {
         $category = $this->get('pim_catalog.repository.category')->findOneByIdentifier($code);
         $this->get('pim_catalog.remover.category')->remove($category);
-
     }
 
     public function testListCategories()
     {
         $client = $this->createAuthenticatedClient();
 
-        $client->request('GET', 'api/rest/v1/categories');
+        $client->request('GET', 'api/rest/v1/categories?search={"parent":[{"operator":"EMPTY"}]}');
 
         $expected = <<<JSON
 {
     "_links": {
         "self": {
-            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false"
+            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22EMPTY%22%7D%5D%7D"
         },
         "first": {
-            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false"
+            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22EMPTY%22%7D%5D%7D"
         }
     },
     "current_page": 1,
@@ -78,58 +82,27 @@ class ListCategoryIntegration extends ApiTestCase
                 },
                 "code": "master",
                 "parent": null,
-                "labels": {}
-            },
-            {
-                "_links": {
-                    "self": {
-                        "href": "http://localhost/api/rest/v1/categories/categoryA"
-                    }
-                },
-                "code": "categoryA",
-                "parent": "master",
                 "labels": {
-                    "en_US": "Category A",
-                    "fr_FR": "Catégorie A"
+                    "en_US": "Master catalog"
                 }
             },
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/categories/categoryA1"
+                        "href": "http://localhost/api/rest/v1/categories/tree1"
                     }
                 },
-                "code": "categoryA1",
-                "parent": "categoryA",
+                "code": "tree1",
+                "parent": null,
                 "labels": {}
             },
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/categories/categoryA2"
+                        "href": "http://localhost/api/rest/v1/categories/tree2"
                     }
                 },
-                "code": "categoryA2",
-                "parent": "categoryA",
-                "labels": {}
-            },
-            {
-                "_links": {
-                    "self": {
-                        "href": "http://localhost/api/rest/v1/categories/categoryB"
-                    }
-                },
-                "code": "categoryB",
-                "parent": "master",
-                "labels": {}
-            },
-            {
-                "_links": {
-                    "self": {
-                        "href": "http://localhost/api/rest/v1/categories/master_china"
-                    }
-                },
-                "code": "master_china",
+                "code": "tree2",
                 "parent": null,
                 "labels": {}
             }
