@@ -2,11 +2,9 @@
 
 namespace Piivo\Bundle\ConnectorBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\UnexpectedResultException;
 use Pim\Bundle\ApiBundle\Doctrine\ORM\Repository\ApiResourceRepository;
-use Pim\Component\Api\Repository\PageableRepositoryInterface;
 use Pim\Component\Catalog\Query\Filter\Operators;
-
 
 /**
  *
@@ -15,22 +13,12 @@ use Pim\Component\Catalog\Query\Filter\Operators;
  */
 class CategoryRepository extends ApiResourceRepository
 {
+    /**
+     * {@inheritdoc}
+     */
     public function searchAfterOffset(array $criteria, array $orders, $limit, $offset)
     {
-        $qb = $this->createQueryBuilder('r');
-
-        foreach ($criteria as $field => $criterion) {
-            switch ($criterion['operator']) {
-                case Operators::IS_EMPTY:
-                    $qb->andWhere(
-                        $qb->expr()->isNull(sprintf('r.%s', $field))
-                    );
-                    break;
-                default:
-                    $qb->andWhere($qb->expr()->eq(sprintf('r.%s', $field), $qb->expr()->literal($criterion)));
-                    break;
-            }
-        }
+        $qb = $this->buildQueryBuilder($criteria);
 
         foreach ($orders as $field => $sort) {
             $qb->addOrderBy(sprintf('r.%s', $field), $sort);
@@ -45,9 +33,54 @@ class CategoryRepository extends ApiResourceRepository
             ->execute();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function count(array $criteria = [])
     {
-        // TODO: Implement count() method.
+        try {
+            $qb = $this->buildQueryBuilder($criteria);
+
+            return (int) $qb
+                ->select('COUNT(r.id)')
+                ->getQuery()
+                ->getSingleScalarResult();
+        } catch (UnexpectedResultException $e) {
+            return 0;
+        }
     }
 
+    /**
+     * Builds query builder from criteria
+     *
+     * @param array $criteria
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    protected function buildQueryBuilder(array $criteria)
+    {
+        $qb = $this->createQueryBuilder('r');
+
+        foreach ($criteria as $field => $criterion) {
+            switch ($criterion['operator']) {
+                case Operators::IS_EMPTY:
+                    $qb->andWhere(
+                        $qb->expr()->isNull(sprintf('r.%s', $field))
+                    );
+                    break;
+                case Operators::EQUALS:
+                    if (in_array($field, ['parent'])) {
+                        $qb->andWhere($qb->expr()->eq(sprintf('r.%s', $field), $qb->expr()->literal($criterion['value']->getId())));
+                    } else {
+                        $qb->andWhere($qb->expr()->eq(sprintf('r.%s', $field), $qb->expr()->literal($criterion['value'])));
+                    }
+                    break;
+                default:
+                    $qb->andWhere($qb->expr()->eq(sprintf('r.%s', $field), $qb->expr()->literal($criterion['value'])));
+                    break;
+            }
+        }
+
+        return $qb;
+    }
 }
