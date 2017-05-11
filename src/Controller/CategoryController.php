@@ -49,7 +49,7 @@ class CategoryController extends BaseApiCategoryController
 
         $offset = $queryParameters['limit'] * ($queryParameters['page'] - 1);
         $order = ['root' => 'ASC', 'left' => 'ASC'];
-        $categories = $this->repository->searchAfterOffset([], $order, $queryParameters['limit'], $offset);
+        $categories = $this->repository->searchAfterOffset($criterias, $order, $queryParameters['limit'], $offset);
 
         $parameters = [
             'query_parameters'    => $queryParameters,
@@ -107,11 +107,56 @@ class CategoryController extends BaseApiCategoryController
             }
 
             foreach ($searchParameter as $searchOperator) {
-                var_dump($searchOperator);
+                if (!isset($searchOperator['operator'])) {
+                    throw new UnprocessableEntityHttpException(
+                        sprintf('Operator is missing for the property "%s".', $searchKey)
+                    );
+                }
 
+                if (!in_array($searchKey, $this->authorizedFieldFilters)) {
+                    throw new UnprocessableEntityHttpException(
+                        sprintf(
+                            'Filter on property "%s" is not supported or does not support operator "%s".',
+                            $searchKey,
+                            $searchOperator['operator']
+                        )
+                    );
+                }
+
+                // Check value property
+                switch ($searchOperator['operator']) {
+                    case Operators::IS_EMPTY:
+                        break;
+                    default:
+                        if (!isset($searchOperator['value'])) {
+                            throw new UnprocessableEntityHttpException(
+                                sprintf('Value is missing for the property "%s".', $searchKey)
+                            );
+                        }
+                }
             }
         }
 
         return $searchParameters;
+    }
+
+    /**
+     * Prepares search criterias
+     * For now, only enabled filter with operator "=" are managed
+     * Value is a boolean
+     *
+     * @param array $searchParameters
+     *
+     * @return array
+     */
+    protected function prepareSearchCriterias(array $searchParameters)
+    {
+        if (empty($searchParameters)) {
+            return [];
+        }
+
+        return [
+            'parent' => $searchParameters['parent'][0]
+        ];
     }
 }
