@@ -57,7 +57,7 @@ class CategoryController extends BaseApiCategoryController
             'item_route_name'     => 'pim_api_category_get',
         ];
 
-        $count = true === $request->query->getBoolean('with_count') ? $this->repository->count() : null;
+        $count = true === $request->query->getBoolean('with_count') ? $this->repository->count($criterias) : null;
         $paginatedCategories = $this->paginator->paginate(
             $this->normalizer->normalize($categories, 'external_api'),
             $parameters,
@@ -106,7 +106,7 @@ class CategoryController extends BaseApiCategoryController
                 );
             }
 
-            foreach ($searchParameter as $searchOperator) {
+            foreach ($searchParameter as $operatorIndex => $searchOperator) {
                 if (!isset($searchOperator['operator'])) {
                     throw new UnprocessableEntityHttpException(
                         sprintf('Operator is missing for the property "%s".', $searchKey)
@@ -126,6 +126,24 @@ class CategoryController extends BaseApiCategoryController
                 // Check value property
                 switch ($searchOperator['operator']) {
                     case Operators::IS_EMPTY:
+                        break;
+                    case Operators::EQUALS:
+                        if (!isset($searchOperator['value'])) {
+                            throw new UnprocessableEntityHttpException(
+                                sprintf('Value is missing for the property "%s".', $searchKey)
+                            );
+                        }
+
+                        if ('parent' === $searchKey) {
+                            $category = $this->repository->findOneByIdentifier($searchOperator['value']);
+                            if (null === $category) {
+                                throw new UnprocessableEntityHttpException(
+                                    sprintf('Category "%s" not found', $searchOperator['value'])
+                                );
+                            }
+                            $searchParameters[$searchKey][$operatorIndex]['value'] = $category;
+                        }
+
                         break;
                     default:
                         if (!isset($searchOperator['value'])) {
