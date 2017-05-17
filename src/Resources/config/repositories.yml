@@ -1,4 +1,11 @@
 services:
+    pim_api.repository.attribute:
+            class: Piivo\Bundle\ConnectorBundle\Repository\AttributeRepository
+            arguments:
+                - '@doctrine.orm.entity_manager'
+                - '%pim_catalog.entity.attribute.class%'
+                - '@pim_catalog.repository.attribute'
+
     pim_api.repository.category:
             class: Piivo\Bundle\ConnectorBundle\Repository\CategoryRepository
             arguments:

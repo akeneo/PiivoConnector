@@ -13,8 +13,7 @@ class ListCategoryIntegration extends ApiTestCase
      */
     protected function setUp()
     {
-        static::bootKernel();
-        self::$count++;
+        parent::setUp();
 
         $this->loadCategory(['code' => 'tree1', 'parent' => null]);
         $this->loadCategory(['code' => 'tree2', 'parent' => null]);
@@ -43,7 +42,7 @@ class ListCategoryIntegration extends ApiTestCase
     {
         $category = $this->get('pim_catalog.factory.category')->create();
         $this->get('pim_catalog.updater.category')->update($category, $data);
-        $this->get('pim_catalog.saver.category')->save($category, ['flush' => false]);
+        $this->get('pim_catalog.saver.category')->save($category);
     }
 
     /**
@@ -168,9 +167,6 @@ JSON;
      */
     protected function getConfiguration()
     {
-        return new Configuration(
-            [Configuration::getTechnicalCatalogPath()],
-            false
-        );
+        return new Configuration([Configuration::getMinimalCatalogPath()]);
     }
 }
