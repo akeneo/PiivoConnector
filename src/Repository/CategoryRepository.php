@@ -75,6 +75,12 @@ class CategoryRepository extends ApiResourceRepository
                         $qb->andWhere($qb->expr()->eq(sprintf('r.%s', $field), $qb->expr()->literal($criterion['value'])));
                     }
                     break;
+                case Operators::LOWER_THAN:
+                    $qb->andWhere($qb->expr()->lt(sprintf('r.%s', $field), $criterion['value']));
+                    break;
+                case Operators::GREATER_THAN:
+                    $qb->andWhere($qb->expr()->gt(sprintf('r.%s', $field), $criterion['value']));
+                    break;
                 default:
                     $qb->andWhere($qb->expr()->eq(sprintf('r.%s', $field), $qb->expr()->literal($criterion['value'])));
                     break;

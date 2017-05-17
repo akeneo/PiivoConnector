@@ -145,6 +145,27 @@ class CategoryController extends BaseApiCategoryController
                         }
 
                         break;
+                    case 'DESCENDANT':
+                        if (!isset($searchOperator['value'])) {
+                            throw new UnprocessableEntityHttpException(
+                                sprintf('Value is missing for the property "%s".', $searchKey)
+                            );
+                        }
+
+                        if ('parent' === $searchKey) {
+                            $category = $this->repository->findOneByIdentifier($searchOperator['value']);
+                            if (null === $category) {
+                                throw new UnprocessableEntityHttpException(
+                                    sprintf('Category "%s" not found', $searchOperator['value'])
+                                );
+                            }
+                            unset($searchParameters[$searchKey]);
+                            $searchParameters['root'] = ['operator' => Operators::EQUALS, 'value' => $category->getRoot()];
+                            $searchParameters['left'] = ['operator' => Operators::GREATER_THAN, 'value' => $category->getLeft()];
+                            $searchParameters['right'] = ['operator' => Operators::LOWER_THAN, 'value' => $category->getRight()];
+                        }
+
+                        break;
                     default:
                         if (!isset($searchOperator['value'])) {
                             throw new UnprocessableEntityHttpException(
@@ -173,8 +194,11 @@ class CategoryController extends BaseApiCategoryController
             return [];
         }
 
-        return [
-            'parent' => $searchParameters['parent'][0]
-        ];
+        if (isset($searchParameters['parent'][0])) {
+            $searchParameters['parent'] = $searchParameters['parent'][0];
+            unset($searchParameters['parent'][0]);
+        }
+
+        return $searchParameters;
     }
 }

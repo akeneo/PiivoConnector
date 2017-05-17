@@ -162,6 +162,74 @@ JSON;
         $this->assertJsonStringEqualsJsonString($expected, $response->getContent());
     }
 
+    public function testListDescendants()
+    {
+        $client = $this->createAuthenticatedClient();
+        $client->request('GET', 'api/rest/v1/categories?search={"parent":[{"operator":"DESCENDANT", "value":"tree1"}]}');
+
+        $expected = <<<JSON
+{
+    "_links": {
+        "self": {
+            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22DESCENDANT%22%2C+%22value%22%3A%22tree1%22%7D%5D%7D"
+        },
+        "first": {
+            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22DESCENDANT%22%2C+%22value%22%3A%22tree1%22%7D%5D%7D"
+        }
+    },
+    "current_page": 1,
+    "_embedded": {
+        "items": [
+            {
+                "_links": {
+                    "self": {
+                        "href": "http://localhost/api/rest/v1/categories/parent1"
+                    }
+                },
+                "code": "parent1",
+                "parent": "tree1",
+                "labels": {}
+            },
+            {
+                "_links": {
+                    "self": {
+                        "href": "http://localhost/api/rest/v1/categories/leaf1"
+                    }
+                },
+                "code": "leaf1",
+                "parent": "parent1",
+                "labels": {}
+            },
+            {
+                "_links": {
+                    "self": {
+                        "href": "http://localhost/api/rest/v1/categories/parent2"
+                    }
+                },
+                "code": "parent2",
+                "parent": "tree1",
+                "labels": {}
+            },
+            {
+                "_links": {
+                    "self": {
+                        "href": "http://localhost/api/rest/v1/categories/leaf2"
+                    }
+                },
+                "code": "leaf2",
+                "parent": "parent2",
+                "labels": {}
+            }
+        ]
+    }
+}
+JSON;
+
+        $response = $client->getResponse();
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode(), $response->getContent());
+        $this->assertJsonStringEqualsJsonString($expected, $response->getContent());
+    }
+
     /**
      * {@inheritdoc}
      */
