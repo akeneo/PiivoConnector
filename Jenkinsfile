@@ -105,7 +105,7 @@ def runPhpUnitTest(phpVersion, storage) {
                         if ('odm' == storage) {
                             sh "composer require --no-update --prefer-dist doctrine/mongodb-odm-bundle 3.0.1"
                         }
-                        sh "php -d memory_limit=4G /usr/local/bin/composer update --ignore-platform-reqs --optimize-autoloader --no-interaction --no-progress --prefer-dist"
+                        sh "php -d memory_limit=4G /usr/local/bin/composer install --ignore-platform-reqs --optimize-autoloader --no-interaction --no-progress --prefer-dist"
 
                         def extensionPath = "vendor/akeneo/piivo-connector/Piivo/Bundle/ConnectorBundle"
                         dir(extensionPath) {
