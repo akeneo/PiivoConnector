@@ -6,7 +6,6 @@ def mysqlVersion = "5.5"
 def storages = ["orm", "odm"]
 
 def launchStaticAnalysis = "yes"
-def launchUnitTests = "yes"
 def launchIntegrationTests = "yes"
 
 class Globals {
@@ -22,7 +21,6 @@ stage("Checkout") {
         userInput = input(message: 'Launch tests?', parameters: [
             string(defaultValue: "${Globals.extensionBranch}", description: 'Extension branch to build', name: 'extensionBranch'),
             choice(choices: 'yes\nno', description: 'Run static analysis', name: 'launchStaticAnalysis'),
-            choice(choices: 'yes\nno', description: 'Run unit tests', name: 'launchUnitTests'),
             choice(choices: 'yes\nno', description: 'Run integration tests', name: 'launchIntegrationTests'),
             string(defaultValue: 'odm,orm', description: 'Storage used for the behat tests (comma separated values)', name: 'storages'),
         ])
@@ -30,7 +28,6 @@ stage("Checkout") {
         Globals.extensionBranch = userInput['extensionBranch']
         storages = userInput['storages'].tokenize(',')
         launchStaticAnalysis = userInput['launchStaticAnalysis']
-        launchUnitTests = userInput['launchUnitTests']
         launchIntegrationTests = userInput['launchIntegrationTests']
     }
     milestone 2
@@ -52,12 +49,6 @@ stage("Checkout") {
 if (launchStaticAnalysis.equals("yes")) {
     stage("Static analysis tests") {
         runPhpCsFixerTest("5.6")
-    }
-}
-
-if (launchUnitTests.equals("yes")) {
-    stage("Unit tests") {
-        runPhpSpecTest("5.6")
     }
 }
 
@@ -101,32 +92,6 @@ def runPhpCsFixerTest(phpVersion) {
     }
 }
 
-def runPhpSpecTest(phpVersion) {
-    node('docker') {
-        deleteDir()
-        try {
-            docker.image("carcel/php:${phpVersion}").inside("-v /home/akeneo/.composer:/home/akeneo/.composer -e COMPOSER_HOME=/home/akeneo/.composer") {
-                unstash "piivo_connector"
-
-                sh "composer require --no-update akeneo/pim-community-dev:${Globals.pimVersion}"
-                sh "composer require --no-update --prefer-dist doctrine/mongodb-odm-bundle 3.0.1"
-                sh "php -d memory_limit=4G /usr/local/bin/composer install --optimize-autoloader --no-interaction --no-progress --prefer-dist"
-
-                sh "mkdir -p app/build/logs/"
-                sh "./bin/phpspec run --no-interaction --format=junit > app/build/logs/phpspec.xml"
-            }
-        } finally {
-            sh "docker stop \$(docker ps -a -q) || true"
-            sh "docker rm \$(docker ps -a -q) || true"
-            sh "docker volume rm \$(docker volume ls -q) || true"
-
-            sh "sed -i \"s/testcase name=\\\"/testcase name=\\\"[php-${phpVersion}] /\" app/build/logs/*.xml"
-            junit "app/build/logs/*.xml"
-            deleteDir()
-        }
-    }
-}
-
 def runPhpUnitTest(phpVersion, storage) {
     node('docker') {
         deleteDir()
@@ -140,7 +105,7 @@ def runPhpUnitTest(phpVersion, storage) {
                         if ('odm' == storage) {
                             sh "composer require --no-update --prefer-dist doctrine/mongodb-odm-bundle 3.0.1"
                         }
-                        sh "php -d memory_limit=4G /usr/local/bin/composer update --ignore-platform-reqs --optimize-autoloader --no-interaction --no-progress --prefer-dist"
+                        sh "php -d memory_limit=4G /usr/local/bin/composer install --ignore-platform-reqs --optimize-autoloader --no-interaction --no-progress --prefer-dist"
 
                         def extensionPath = "vendor/akeneo/piivo-connector/Piivo/Bundle/ConnectorBundle"
                         dir(extensionPath) {
