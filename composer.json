@@ -20,7 +20,8 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "akeneo/pim-community-dev": "1.7.*"
+        "akeneo/pim-community-dev": "1.7.*",
+        "akeneo/extended-attribute-type": "1.1.*"
     },
     "require-dev": {
         "phpspec/phpspec": "3.0.0",
