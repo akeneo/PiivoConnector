@@ -12,3 +12,10 @@ services:
                 - '@doctrine.orm.entity_manager'
                 - '%pim_catalog.entity.category.class%'
                 - '@pim_catalog.repository.category'
+
+    pim_api.repository.family:
+            class: Piivo\Bundle\ConnectorBundle\Repository\FamilyRepository
+            arguments:
+                - '@doctrine.orm.entity_manager'
+                - '%pim_catalog.entity.family.class%'
+                - '@pim_catalog.repository.family'

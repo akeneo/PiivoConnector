@@ -3,15 +3,15 @@
 namespace Piivo\Bundle\ConnectorBundle\Repository;
 
 use Doctrine\ORM\UnexpectedResultException;
-use Pim\Bundle\ApiBundle\Doctrine\ORM\Repository\AttributeRepository as BaseAttributeRepository;
+use Pim\Bundle\ApiBundle\Doctrine\ORM\Repository\ApiResourceRepository;
 use Pim\Component\Catalog\Query\Filter\Operators;
 
+
 /**
- *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2017 Akeneo SAS (http://www.akeneo.com)
  */
-class AttributeRepository extends BaseAttributeRepository
+class FamilyRepository extends ApiResourceRepository
 {
     /**
      * {@inheritdoc}
@@ -63,11 +63,6 @@ class AttributeRepository extends BaseAttributeRepository
 
         foreach ($criteria as $field => $criterion) {
             switch ($criterion['operator']) {
-                case Operators::IN_LIST:
-                    $qb->andWhere(
-                        $qb->expr()->in(sprintf('r.%s', $field), $criterion['value'])
-                    );
-                    break;
                 case Operators::GREATER_THAN:
                     $qb->andWhere(
                         $qb->expr()->gt(sprintf('r.%s', $field), $qb->expr()->literal($criterion['value']))

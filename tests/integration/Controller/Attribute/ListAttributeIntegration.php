@@ -150,6 +150,7 @@ class ListAttributeIntegration extends ApiTestCase
 JSON;
 
         $response = $client->getResponse();
+        var_dump(json_decode($response->getContent()));
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString($expected, $response->getContent());
     }
@@ -241,6 +242,241 @@ JSON;
     }
 }
 JSON;
+
+        $response = $client->getResponse();
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertJsonStringEqualsJsonString($expected, $response->getContent());
+    }
+
+    public function testListLastUpdatedAttributes()
+    {
+        $client = $this->createAuthenticatedClient();
+        $datetime = new \DateTime('yesterday');
+        $dateString = $datetime->format(\DateTime::ISO8601);
+
+        $searchParameters= json_encode([
+            'updated' => [[
+                'operator' => '>',
+                'value' => $dateString
+            ]]
+        ]);
+        $client->request('GET', 'api/rest/v1/attributes', ['search' => $searchParameters]);
+
+        $expected = <<<JSON
+{
+    "_links": {
+        "self": {
+            "href": "http://localhost/api/rest/v1/attributes?page=1&limit=10&with_count=false&%s"
+        },
+        "first": {
+            "href": "http://localhost/api/rest/v1/attributes?page=1&limit=10&with_count=false&%s"
+        }
+    },
+    "current_page": 1,
+    "_embedded": {
+        "items": [
+            {
+                "_links": {
+                    "self": {
+                        "href": "http://localhost/api/rest/v1/attributes/attr_file"
+                    }
+                },
+                "code"                   : "attr_file",
+                "type"                   : "pim_catalog_file",
+                "group"                  : "other",
+                "unique"                 : false,
+                "useable_as_grid_filter" : false,
+                "allowed_extensions"     : [],
+                "metric_family"          : null,
+                "default_metric_unit"    : null,
+                "reference_data_name"    : null,
+                "available_locales"      : [],
+                "max_characters"         : null,
+                "validation_rule"        : null,
+                "validation_regexp"      : null,
+                "wysiwyg_enabled"        : null,
+                "number_min"             : null,
+                "number_max"             : null,
+                "decimals_allowed"       : null,
+                "negative_allowed"       : null,
+                "date_min"               : null,
+                "date_max"               : null,
+                "max_file_size"          : null,
+                "minimum_input_length"   : null,
+                "sort_order"             : 0,
+                "localizable"            : false,
+                "scopable"               : false,
+                "labels"                 : {}
+            },{
+                "_links": {
+                    "self": {
+                        "href": "http://localhost/api/rest/v1/attributes/attr_image"
+                    }
+                },
+                "code"                   : "attr_image",
+                "type"                   : "pim_catalog_image",
+                "group"                  : "other",
+                "unique"                 : false,
+                "useable_as_grid_filter" : false,
+                "allowed_extensions"     : [],
+                "metric_family"          : null,
+                "default_metric_unit"    : null,
+                "reference_data_name"    : null,
+                "available_locales"      : [],
+                "max_characters"         : null,
+                "validation_rule"        : null,
+                "validation_regexp"      : null,
+                "wysiwyg_enabled"        : null,
+                "number_min"             : null,
+                "number_max"             : null,
+                "decimals_allowed"       : null,
+                "negative_allowed"       : null,
+                "date_min"               : null,
+                "date_max"               : null,
+                "max_file_size"          : null,
+                "minimum_input_length"   : null,
+                "sort_order"             : 0,
+                "localizable"            : false,
+                "scopable"               : false,
+                "labels"                 : {}
+            },{
+                "_links": {
+                    "self": {
+                        "href": "http://localhost/api/rest/v1/attributes/attr_number"
+                    }
+                },
+                "code"                   : "attr_number",
+                "type"                   : "pim_catalog_number",
+                "group"                  : "other",
+                "unique"                 : false,
+                "useable_as_grid_filter" : false,
+                "allowed_extensions"     : [],
+                "metric_family"          : null,
+                "default_metric_unit"    : null,
+                "reference_data_name"    : null,
+                "available_locales"      : [],
+                "max_characters"         : null,
+                "validation_rule"        : null,
+                "validation_regexp"      : null,
+                "wysiwyg_enabled"        : null,
+                "number_min"             : null,
+                "number_max"             : null,
+                "decimals_allowed"       : false,
+                "negative_allowed"       : false,
+                "date_min"               : null,
+                "date_max"               : null,
+                "max_file_size"          : null,
+                "minimum_input_length"   : null,
+                "sort_order"             : 0,
+                "localizable"            : false,
+                "scopable"               : false,
+                "labels"                 : {}
+            },{
+                "_links": {
+                    "self": {
+                        "href": "http://localhost/api/rest/v1/attributes/attr_text"
+                    }
+                },
+                "code"                   : "attr_text",
+                "type"                   : "pim_catalog_text",
+                "group"                  : "other",
+                "unique"                 : false,
+                "useable_as_grid_filter" : false,
+                "allowed_extensions"     : [],
+                "metric_family"          : null,
+                "default_metric_unit"    : null,
+                "reference_data_name"    : null,
+                "available_locales"      : [],
+                "max_characters"         : null,
+                "validation_rule"        : null,
+                "validation_regexp"      : null,
+                "wysiwyg_enabled"        : null,
+                "number_min"             : null,
+                "number_max"             : null,
+                "decimals_allowed"       : null,
+                "negative_allowed"       : null,
+                "date_min"               : null,
+                "date_max"               : null,
+                "max_file_size"          : null,
+                "minimum_input_length"   : null,
+                "sort_order"             : 0,
+                "localizable"            : false,
+                "scopable"               : false,
+                "labels"                 : {}
+            },{
+                "_links": {
+                    "self": {
+                        "href": "http://localhost/api/rest/v1/attributes/attr_text_2"
+                    }
+                },
+                "code"                   : "attr_text_2",
+                "type"                   : "pim_catalog_text",
+                "group"                  : "other",
+                "unique"                 : false,
+                "useable_as_grid_filter" : false,
+                "allowed_extensions"     : [],
+                "metric_family"          : null,
+                "default_metric_unit"    : null,
+                "reference_data_name"    : null,
+                "available_locales"      : [],
+                "max_characters"         : null,
+                "validation_rule"        : null,
+                "validation_regexp"      : null,
+                "wysiwyg_enabled"        : null,
+                "number_min"             : null,
+                "number_max"             : null,
+                "decimals_allowed"       : null,
+                "negative_allowed"       : null,
+                "date_min"               : null,
+                "date_max"               : null,
+                "max_file_size"          : null,
+                "minimum_input_length"   : null,
+                "sort_order"             : 0,
+                "localizable"            : false,
+                "scopable"               : false,
+                "labels"                 : {}
+            },{
+                "_links": {
+                    "self": {
+                        "href": "http://localhost/api/rest/v1/attributes/sku"
+                    }
+                },
+                "code"                   : "sku",
+                "type"                   : "pim_catalog_identifier",
+                "group"                  : "other",
+                "unique"                 : true,
+                "useable_as_grid_filter" : true,
+                "allowed_extensions"     : [],
+                "metric_family"          : null,
+                "default_metric_unit"    : null,
+                "reference_data_name"    : null,
+                "available_locales"      : [],
+                "max_characters"         : null,
+                "validation_rule"        : null,
+                "validation_regexp"      : null,
+                "wysiwyg_enabled"        : null,
+                "number_min"             : null,
+                "number_max"             : null,
+                "decimals_allowed"       : null,
+                "negative_allowed"       : null,
+                "date_min"               : null,
+                "date_max"               : null,
+                "max_file_size"          : null,
+                "minimum_input_length"   : null,
+                "sort_order"             : 0,
+                "localizable"            : false,
+                "scopable"               : false,
+                "labels"                 : {
+                    "en_US": "SKU"
+                }
+            }
+        ]
+    }
+}
+JSON;
+
+        $queryString = $client->getRequest()->getQueryString();
+        $expected = sprintf($expected, $queryString, $queryString);
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());

@@ -3,7 +3,7 @@
 namespace Piivo\Bundle\ConnectorBundle\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Pim\Bundle\ApiBundle\Controller\AttributeController as BaseApiAttributeController;
+use Pim\Bundle\ApiBundle\Controller\FamilyController as BaseApiFamilyController;
 use Pim\Component\Api\Exception\PaginationParametersException;
 use Pim\Component\Catalog\Query\Filter\Operators;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,17 +16,17 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2017 Akeneo SAS (http://www.akeneo.com)
  */
-class AttributeController extends BaseApiAttributeController
+class FamilyController extends BaseApiFamilyController
 {
     /** @var string[] */
-    protected $authorizedFieldFilters = ['type', 'updated'];
+    protected $authorizedFieldFilters = ['updated'];
 
     /**
      * @param Request $request
      *
      * @return JsonResponse
      *
-     * @AclAncestor("pim_api_attribute_list")
+     * @AclAncestor("pim_api_family_list")
      */
     public function listAction(Request $request)
     {
@@ -48,22 +48,22 @@ class AttributeController extends BaseApiAttributeController
         $queryParameters = array_merge($defaultParameters, $request->query->all());
 
         $offset = $queryParameters['limit'] * ($queryParameters['page'] - 1);
-        $attributes = $this->repository->searchAfterOffset($criterias, ['code' => 'ASC'], $queryParameters['limit'], $offset);
+        $families = $this->repository->searchAfterOffset($criterias, ['code' =>'ASC'], $queryParameters['limit'], $offset);
 
         $parameters = [
             'query_parameters'    => $queryParameters,
-            'list_route_name'     => 'pim_api_attribute_list',
-            'item_route_name'     => 'pim_api_attribute_get',
+            'list_route_name'     => 'pim_api_family_list',
+            'item_route_name'     => 'pim_api_family_get',
         ];
 
-        $count = true === $request->query->getBoolean('with_count') ? $this->repository->count($criterias) : null;
-        $paginatedAttributes = $this->paginator->paginate(
-            $this->normalizer->normalize($attributes, 'external_api'),
+        $count = true === $request->query->getBoolean('with_count') ? $this->repository->count() : null;
+        $paginatedFamilies = $this->paginator->paginate(
+            $this->normalizer->normalize($families, 'external_api'),
             $parameters,
             $count
         );
 
-        return new JsonResponse($paginatedAttributes);
+        return new JsonResponse($paginatedFamilies);
     }
 
     /**
@@ -105,7 +105,7 @@ class AttributeController extends BaseApiAttributeController
                 );
             }
 
-            foreach ($searchParameter as $searchOperator) {
+            foreach ($searchParameter as $operatorIndex => $searchOperator) {
                 if (!isset($searchOperator['operator'])) {
                     throw new UnprocessableEntityHttpException(
                         sprintf('Operator is missing for the property "%s".', $searchKey)
@@ -124,6 +124,14 @@ class AttributeController extends BaseApiAttributeController
 
                 // Check value property
                 switch ($searchOperator['operator']) {
+                    case Operators::EQUALS:
+                        if (!isset($searchOperator['value'])) {
+                            throw new UnprocessableEntityHttpException(
+                                sprintf('Value is missing for the property "%s".', $searchKey)
+                            );
+                        }
+
+                        break;
                     default:
                         if (!isset($searchOperator['value'])) {
                             throw new UnprocessableEntityHttpException(
@@ -139,6 +147,8 @@ class AttributeController extends BaseApiAttributeController
 
     /**
      * Prepares search criterias
+     * For now, only enabled filter with operator "=" are managed
+     * Value is a boolean
      *
      * @param array $searchParameters
      *
@@ -150,13 +160,7 @@ class AttributeController extends BaseApiAttributeController
             return [];
         }
 
-        if (isset($searchParameters['type'][0])) {
-            $searchParameters['type'] = $searchParameters['type'][0];
-            unset($searchParameters['type'][0]);
-        }
         if (isset($searchParameters['updated'][0])) {
-            $datetime = \DateTime::createFromFormat(\DateTime::ISO8601, $searchParameters['updated'][0]['value']);
-            $searchParameters['updated'][0]['value'] = $datetime->format('Y-m-d H:i:s');
             $searchParameters['updated'] = $searchParameters['updated'][0];
             unset($searchParameters['updated'][0]);
         }

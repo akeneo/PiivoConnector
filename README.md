@@ -23,11 +23,71 @@ and enable the bundle in the `app/AppKernel.php` file in the `registerBundles()`
     $bundles = [
         // ...
         new Piivo\Bundle\ConnectorBundle\PiivoConnectorBundle(),
+        new Pim\Bundle\ExtendedAttributeTypeBundle\PimExtendedAttributeTypeBundle(),
     ]
 ```
 
 If your installation is already set up, don't forget to clean your cache in production environment.
 
+
+### (Optionnal) Example bundles
+
+This connector is shipped with complete example bundle, especially to override the ProductValue model.
+This is needed to use the new TextCollection attribute type.
+
+The easiest way to enable it is to use a symbolic link:
+
+```
+cd src
+ln -s ../vendor/akeneo/extended-attribute-type/doc/example/Pim Pim
+```
+
+In Community edition,
+After that, you will be able to use the example bundles in `app/AppKernel.php`:
+
+```php
+    protected function registerProjectBundles()
+    {
+        return [
+            new Pim\Bundle\ExtendedAttributeTypeBundle\PimExtendedAttributeTypeBundle(),
+            new Pim\Bundle\PiivoConnectorBundle\PimPiivoConnectorBundle(),
+            new Pim\Bundle\ExtendedCeBundle\ExtendedCeBundle(),   // example CE bundle to activate the extended attributes
+        ];
+    }
+```
+
+```
+akeneo_storage_utils:
+    mapping_overrides:
+        -
+            original: Pim\Component\Catalog\Model\ProductValue
+            override: Pim\Bundle\ExtendedCeBundle\Model\ProductValue
+```
+
+In Enterprise edition:
+After that, you will be able to use the example bundles in `app/AppKernel.php`:
+
+```php
+    protected function registerProjectBundles()
+    {
+        return [
+            new Pim\Bundle\ExtendedAttributeTypeBundle\PimExtendedAttributeTypeBundle(),
+            new Pim\Bundle\PiivoConnectorBundle\PimPiivoConnectorBundle(),
+            new Pim\Bundle\ExtendedEeBundle\ExtendedEeBundle(), // example EE bundle to activate the extended attributes
+        ];
+    }
+```
+
+```
+akeneo_storage_utils:
+    mapping_overrides:
+        -
+            original: PimEnterprise\Component\Catalog\Model\ProductValue
+            override: Pim\Bundle\ExtendedEeBundle\Model\ProductValue
+        -
+            original: PimEnterprise\Component\Workflow\Model\PublishedProductValue
+            override: Pim\Bundle\ExtendedEeBundle\Model\PublishedProductValue
+```
 
 ## Documentation
 
