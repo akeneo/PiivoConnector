@@ -1,12 +1,12 @@
 <?php
 
-namespace Piivo\Bundle\ConnectorBundle\tests\integration\Controller\Family;
+namespace Piivo\Bundle\ConnectorBundle\tests\integration\Controller\Version;
 
 use Akeneo\Test\Integration\Configuration;
 use Pim\Bundle\ApiBundle\tests\integration\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class ListFamilyIntegration extends ApiTestCase
+class ListVersionIntegration extends ApiTestCase
 {
     /**
      * {@inheritdoc}
@@ -16,7 +16,6 @@ class ListFamilyIntegration extends ApiTestCase
         parent::setUp();
 
         $this->loadFamily(['code' => 'tshirt_family']);
-        $this->loadFamily(['code' => 'shoes_family']);
     }
 
     /**
@@ -25,7 +24,6 @@ class ListFamilyIntegration extends ApiTestCase
     protected function tearDown()
     {
         $this->removeFamily('tshirt_family');
-        $this->removeFamily('shoes_family');
 
         parent::tearDown();
     }
@@ -49,7 +47,7 @@ class ListFamilyIntegration extends ApiTestCase
         $this->get('pim_catalog.remover.family')->remove($family);
     }
 
-    public function testListLastUpdatedFamilies()
+    public function testListDeletedFamilies()
     {
         $client = $this->createAuthenticatedClient();
         $datetime = new \DateTime('yesterday');
@@ -61,47 +59,25 @@ class ListFamilyIntegration extends ApiTestCase
                 'value' => $dateString
             ]]
         ]);
-        $client->request('GET', 'api/rest/v1/families', ['search' => $searchParameters]);
+        $client->request('GET', 'api/rest/v1/versions/deleted/family'/*, ['search' => $searchParameters]*/);
 
         $expected = <<<JSON
 {
     "_links": {
         "self": {
-            "href": "http://localhost/api/rest/v1/families?page=1&limit=10&with_count=false&%s"
+            "href": "http://localhost/api/rest/v1/versions/deleted/family?page=1&limit=10&with_count=false&%s"
         },
         "first": {
-            "href": "http://localhost/api/rest/v1/families?page=1&limit=10&with_count=false&%s"
+            "href": "http://localhost/api/rest/v1/versions/deleted/family?page=1&limit=10&with_count=false&%s"
         }
     },
     "current_page": 1,
     "_embedded": {
         "items": [
             {
-                "_links": {
-                    "self": {
-                        "href": "http://localhost/api/rest/v1/families/shoes_family"
-                    }
-                },
-                "code"                   : "shoes_family",
-                "labels"                 : {},
-                "attributes"             : ["sku"],
-                "attribute_as_label"     : "sku",
-                "attribute_requirements" : {
-                    "ecommerce": ["sku"]
-                }
+                "code" : "shoes_family"
             },{
-                "_links": {
-                    "self": {
-                        "href": "http://localhost/api/rest/v1/families/tshirt_family"
-                    }
-                },
-                "code"                   : "tshirt_family",
-                "labels"                 : {},
-                "attributes"             : ["sku"],
-                "attribute_as_label"     : "sku",
-                "attribute_requirements" : {
-                    "ecommerce": ["sku"]
-                }
+                "code" : "tshirt_family"
             }
         ]
     }
@@ -112,6 +88,7 @@ JSON;
         $expected = sprintf($expected, $queryString, $queryString);
 
         $response = $client->getResponse();
+        var_dump($response->getContent());
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString($expected, $response->getContent());
     }

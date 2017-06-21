@@ -1,0 +1,2 @@
+piivo_api_version_deleted_list:
+    path: /rest/v1/versions/deleted/{entityName}/

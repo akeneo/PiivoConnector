@@ -150,7 +150,6 @@ class ListAttributeIntegration extends ApiTestCase
 JSON;
 
         $response = $client->getResponse();
-        var_dump(json_decode($response->getContent()));
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString($expected, $response->getContent());
     }
