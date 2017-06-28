@@ -103,7 +103,7 @@ def runPhpUnitTest(phpVersion, storage) {
                     sh "cp ${extensionPath}/tests/resources/parameters_test.yml app/config/parameters_test.yml"
                     sh "cat ${extensionPath}/tests/resources/routing.yml >> app/config/routing.yml"
 
-                    sh "sed -i 's#// your app bundles should be registered here#\\0\\nnew Piivo\\\\Bundle\\\\ConnectorBundle\\\\PiiVoConnectorBundle(),new Pim\\\\Bundle\\\\ExtendedAttributeTypeBundle\\\\PimExtendedAttributeTypeBundle(),new Pim\\\\Bundle\\\\ExtendedCeBundle\\\\ExtendedCeBundle(),#' app/AppKernel.php"
+                    sh "sed -i 's#// your app bundles should be registered here#\\0\\nnew Piivo\\\\Bundle\\\\ConnectorBundle\\\\PiivoConnectorBundle(),new Pim\\\\Bundle\\\\ExtendedAttributeTypeBundle\\\\PimExtendedAttributeTypeBundle(),new Pim\\\\Bundle\\\\ExtendedCeBundle\\\\ExtendedCeBundle(),#' app/AppKernel.php"
 
                     sh "cat app/AppKernel.php"
                     sh "cat app/config/parameters_test.yml"
