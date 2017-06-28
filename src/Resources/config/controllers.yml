@@ -10,3 +10,11 @@ services:
             - '@piivo_connector.repository.version'
             - '@pim_catalog.repository.attribute'
             - '%pim_api.configuration%'
+
+    piivo_connector.controller.attribute_option:
+        class: Piivo\Bundle\ConnectorBundle\Controller\AttributeOptionController
+        arguments:
+            - '@pim_catalog.query.product_query_builder_factory'
+            - '@pim_catalog.saver.product'
+            - '@pim_catalog.repository.attribute'
+            - '%pim_api.configuration%'

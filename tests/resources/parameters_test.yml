@@ -9,5 +9,5 @@ parameters:
     locale: en
     secret: AkeneoJenkinsToken
 
-    installer_data: PimEnterpriseInstallerBundle:minimal
+    installer_data: PimInstallerBundle:minimal
     pim_inner_variation_automatic_identifier: true
