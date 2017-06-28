@@ -2,9 +2,9 @@
 
 namespace Piivo\Bundle\ConnectorBundle\Repository;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\UnexpectedResultException;
-
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  *
@@ -14,43 +14,62 @@ use Doctrine\ORM\UnexpectedResultException;
 class VersionRepository extends EntityRepository
 {
     /**
-     * {@inheritdoc}
+     * @param EntityManager $em
+     * @param string $class
      */
-    public function searchAfterOffset(array $criteria, array $orders, $limit, $offset)
+    public function __construct(EntityManager $em, $class)
     {
-        $qb = $this->createQueryBuilder('r');
-
-        foreach ($criteria as $field => $criterion) {
-            $qb->andWhere($qb->expr()->eq(sprintf('r.%s ', $field), $qb->expr()->literal($criterion)));
-        }
-
-        if (null !== $offset) {
-            $qb->setFirstResult($offset);
-        }
-
-        return $qb->setMaxResults($limit)
-            ->getQuery()
-            ->execute();
+        parent::__construct($em, new ClassMetadata($class));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function count(array $criteria = [])
+    public function searchAfterOffset($entityClass, array $criteria = [])
     {
-        try {
-            $qb = $this->createQueryBuilder('r');
+        $qb = $this->buildQueryBuilder($entityClass, $criteria);
 
-            foreach ($criteria as $field => $criterion) {
-                $qb->andWhere($qb->expr()->eq(sprintf('r.%s ', $field), $qb->expr()->literal($criterion)));
-            }
+        return $qb
+            ->getQuery()
+            ->execute();
+    }
 
-            return (int) $qb
-                ->select('COUNT(r.id)')
-                ->getQuery()
-                ->getSingleScalarResult();
-        } catch (UnexpectedResultException $e) {
-            return 0;
+    /**
+     * @param array $criteria
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    protected function buildQueryBuilder($entityClass, array $criteria)
+    {
+        $qb = $this->createQueryBuilder('r');
+        $qb
+            ->select('r.snapshot')
+            ->andWhere(
+                $qb->expr()->eq('r.resourceName', $qb->expr()->literal($entityClass))
+            )
+            ->andWhere(
+                $qb->expr()->eq('r.context', $qb->expr()->literal('Deleted'))
+            )
+        ;
+
+        foreach ($criteria as $key => $value) {
+            $qb->andWhere(
+                $qb->expr()->gt(
+                    sprintf('r.%s', $key), $qb->expr()->literal($value)
+                )
+            );
         }
+
+        return $qb;
+    }
+
+    /**
+     * Returns an array containing the name of the unique identifier properties
+     *
+     * @return array
+     */
+    public function getIdentifierProperties()
+    {
+        return ['id'];
     }
 }

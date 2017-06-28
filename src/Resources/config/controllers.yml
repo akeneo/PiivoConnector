@@ -8,8 +8,5 @@ services:
         class: Piivo\Bundle\ConnectorBundle\Controller\VersionController
         arguments:
             - '@piivo_connector.repository.version'
-            - '@pim_serializer'
-            - '@router'
-            - '@pim_api.pagination.offset_hal_paginator'
-            - '@pim_api.pagination.parameter_validator'
+            - '@pim_catalog.repository.attribute'
             - '%pim_api.configuration%'
