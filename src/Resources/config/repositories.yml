@@ -14,8 +14,14 @@ services:
                 - '@pim_catalog.repository.category'
 
     pim_api.repository.family:
-            class: Piivo\Bundle\ConnectorBundle\Repository\FamilyRepository
-            arguments:
-                - '@doctrine.orm.entity_manager'
-                - '%pim_catalog.entity.family.class%'
-                - '@pim_catalog.repository.family'
+        class: Piivo\Bundle\ConnectorBundle\Repository\FamilyRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '%pim_catalog.entity.family.class%'
+            - '@pim_catalog.repository.family'
+
+    piivo_connector.repository.version:
+        class: Piivo\Bundle\ConnectorBundle\Repository\VersionRepository
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '%pim_versioning.entity.version.class%'

@@ -1,0 +1,3 @@
+piivo_api:
+   resource: "@PiivoConnectorBundle/Resources/config/routing.yml"
+   prefix: /api

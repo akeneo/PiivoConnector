@@ -6,7 +6,6 @@ use Doctrine\ORM\UnexpectedResultException;
 use Pim\Bundle\ApiBundle\Doctrine\ORM\Repository\ApiResourceRepository;
 use Pim\Component\Catalog\Query\Filter\Operators;
 
-
 /**
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2017 Akeneo SAS (http://www.akeneo.com)

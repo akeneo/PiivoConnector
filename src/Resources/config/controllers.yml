@@ -2,3 +2,11 @@ parameters:
     pim_api.controller.attribute.class: Piivo\Bundle\ConnectorBundle\Controller\AttributeController
     pim_api.controller.category.class: Piivo\Bundle\ConnectorBundle\Controller\CategoryController
     pim_api.controller.family.class: Piivo\Bundle\ConnectorBundle\Controller\FamilyController
+
+services:
+    piivo_connector.controller.version:
+        class: Piivo\Bundle\ConnectorBundle\Controller\VersionController
+        arguments:
+            - '@piivo_connector.repository.version'
+            - '@pim_catalog.repository.attribute'
+            - '%pim_api.configuration%'
