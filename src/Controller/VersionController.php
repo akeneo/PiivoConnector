@@ -1,6 +1,7 @@
 <?php
 
 namespace Piivo\Bundle\ConnectorBundle\Controller;
+
 use Piivo\Bundle\ConnectorBundle\Repository\VersionRepository;
 use Pim\Bundle\CatalogBundle\Doctrine\ORM\Repository\AttributeRepository;
 use Pim\Component\Catalog\Query\Filter\Operators;
@@ -8,7 +9,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-
 
 /**
  * @author    Romain Monceau <romain@akeneo.com>
