@@ -103,7 +103,11 @@ def runPhpUnitTest(phpVersion, storage) {
                     sh "cp ${extensionPath}/tests/resources/parameters_test.yml app/config/parameters_test.yml"
                     sh "cat ${extensionPath}/tests/resources/routing.yml >> app/config/routing.yml"
 
+                    sh "cp -r vendor/akeneo/extended-attribute-type/doc/example/Pim src/"
                     sh "sed -i 's#// your app bundles should be registered here#\\0\\nnew Piivo\\\\Bundle\\\\ConnectorBundle\\\\PiivoConnectorBundle(),new Pim\\\\Bundle\\\\ExtendedAttributeTypeBundle\\\\PimExtendedAttributeTypeBundle(),new Pim\\\\Bundle\\\\ExtendedCeBundle\\\\ExtendedCeBundle(),#' app/AppKernel.php"
+
+                    sh "cat ${extensionPath}/tests/resources/config_test.yml >> app/config/config.yml"
+                    sh "cp ${extensionPath}/tests/resources/phpunit.xml app/phpunit.xml"
 
                     sh "cat app/AppKernel.php"
                     sh "cat app/config/parameters_test.yml"
@@ -112,7 +116,7 @@ def runPhpUnitTest(phpVersion, storage) {
                     sh "rm ./app/cache/* -rf"
                     sh "./app/console --env=test pim:install --force -vvv"
                     sh "mkdir -p app/build/logs/"
-                    sh "./bin/phpunit -c ${extensionPath} --log-junit app/build/logs/phpunit.xml ${extensionPath}/Tests"
+                    sh "./bin/phpunit -c app/phpunit.xml --log-junit app/build/logs/phpunit.xml"
                 }
             }
         } finally {
