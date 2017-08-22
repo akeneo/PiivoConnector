@@ -54,8 +54,10 @@ class AttributeOptionController
      * @param string $attributeCode
      * @param string $item
      */
-    public function deleteItemAction(Request $request, $attributeCode, $item)
+    public function deleteItemAction(Request $request, $attributeCode)
     {
+        $item = $request->query->get('item');
+
         $attribute = $this->attributeRepository->findOneByIdentifier($attributeCode);
         if (null === $attribute) {
             throw new NotFoundHttpException(

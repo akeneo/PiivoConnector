@@ -50,8 +50,9 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
     protected function loadProduct($identifier)
     {
         $product = $this->get('pim_catalog.builder.product')->createProduct($identifier);
+        $textCollection = ['bar', 'foo', 'http://my_server.com/upload/my_image.jpg'];
 
-        $productData = ['my_images' => [['data' => ['bar', 'foo'], 'locale' => null, 'scope' => null]]];
+        $productData = ['my_images' => [['data' => $textCollection, 'locale' => null, 'scope' => null]]];
 
         $this->get('pim_catalog.updater.product')->update($product, ['values' => $productData]);
         $this->get('pim_catalog.saver.product')->save($product);
@@ -77,16 +78,40 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
         }
     }
 
-    public function testListTextAttributes()
+    public function testDeleteItemTextCollectionAttribute()
     {
         $client = $this->createAuthenticatedClient();
-        $client->request('DELETE', 'api/rest/v1/attributes/my_images/items/foo');
+        $client->request(
+            'DELETE',
+            'api/rest/v1/attributes/my_images/items',
+            ['item' => 'foo']
+        );
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $product = $this->get('pim_catalog.repository.product')->findOneByIdentifier('my_sku');
-        $this->assertSame(['bar'], $product->getValue('my_images')->getTextCollection());
+        $textCollection = $product->getValue('my_images')->getTextCollection();
+        $this->assertContains('bar', $textCollection);
+        $this->assertContains('http://my_server.com/upload/my_image.jpg', $textCollection);
+    }
+
+    public function testDeleteUrlTextCollectionAttribute()
+    {
+        $client = $this->createAuthenticatedClient();
+        $client->request(
+            'DELETE',
+            'api/rest/v1/attributes/my_images/items',
+            ['item' => json_encode('http://my_server.com/upload/my_image.jpg')]
+        );
+
+        $response = $client->getResponse();
+        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        $product = $this->get('pim_catalog.repository.product')->findOneByIdentifier('my_sku');
+        $textCollection = $product->getValue('my_images')->getTextCollection();
+        $this->assertContains('bar', $textCollection);
+        $this->assertContains('foo', $textCollection);
     }
 
     /**
