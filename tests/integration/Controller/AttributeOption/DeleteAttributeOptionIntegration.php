@@ -81,27 +81,37 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
     public function testDeleteItemTextCollectionAttribute()
     {
         $client = $this->createAuthenticatedClient();
-        $client->request('DELETE', 'api/rest/v1/attributes/my_images/items/foo');
+        $client->request(
+            'DELETE',
+            'api/rest/v1/attributes/my_images/items',
+            ['item' => 'foo']
+        );
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $product = $this->get('pim_catalog.repository.product')->findOneByIdentifier('my_sku');
-        $this->assertContains('bar', $product->getValue('my_images')->getTextCollection());
-        $this->assertContains('http://my_server.com/upload/my_image.jpg', $product->getValue('my_images')->getTextCollection());
+        $textCollection = $product->getValue('my_images')->getTextCollection();
+        $this->assertContains('bar', $textCollection);
+        $this->assertContains('http://my_server.com/upload/my_image.jpg', $textCollection);
     }
 
     public function testDeleteUrlTextCollectionAttribute()
     {
         $client = $this->createAuthenticatedClient();
-        $client->request('DELETE', 'api/rest/v1/attributes/my_images/items/my_image.jpg');
+        $client->request(
+            'DELETE',
+            'api/rest/v1/attributes/my_images/items',
+            ['item' => json_encode('http://my_server.com/upload/my_image.jpg')]
+        );
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $product = $this->get('pim_catalog.repository.product')->findOneByIdentifier('my_sku');
-        $this->assertContains('bar', $product->getValue('my_images')->getTextCollection());
-        $this->assertContains('foo', $product->getValue('my_images')->getTextCollection());
+        $textCollection = $product->getValue('my_images')->getTextCollection();
+        $this->assertContains('bar', $textCollection);
+        $this->assertContains('foo', $textCollection);
     }
 
     /**

@@ -54,8 +54,10 @@ class AttributeOptionController
      * @param string $attributeCode
      * @param string $item
      */
-    public function deleteItemAction(Request $request, $attributeCode, $item)
+    public function deleteItemAction(Request $request, $attributeCode)
     {
+        $item = $request->query->get('item');
+
         $attribute = $this->attributeRepository->findOneByIdentifier($attributeCode);
         if (null === $attribute) {
             throw new NotFoundHttpException(
@@ -91,25 +93,12 @@ class AttributeOptionController
         $value = $product->getValue($attributeCode);
         $textCollection = (array) $value->getTextCollection();
         foreach ($textCollection as $key => $itemText) {
-            if ($this->endsWith($itemText, $item)) {
+            if ($itemText === $item) {
                 unset($textCollection[$key]);
                 break;
             }
         }
 
         $value->setTextCollection($textCollection);
-    }
-
-    /**
-     * Predicate to know if an $itemText ends by $item
-     *
-     * @param string $itemText
-     * @param string $item
-     *
-     * @return bool
-     */
-    protected function endsWith($itemText, $item)
-    {
-        return substr($itemText, strlen($itemText) - strlen($item)) === $item;
     }
 }
