@@ -110,6 +110,6 @@ class AttributeOptionController
      */
     protected function endsWith($itemText, $item)
     {
-        return substr( $itemText, strlen( $itemText ) - strlen( $item ) ) === $item;
+        return substr($itemText, strlen($itemText) - strlen($item)) === $item;
     }
 }
