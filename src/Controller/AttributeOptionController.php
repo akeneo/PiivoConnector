@@ -91,12 +91,25 @@ class AttributeOptionController
         $value = $product->getValue($attributeCode);
         $textCollection = (array) $value->getTextCollection();
         foreach ($textCollection as $key => $itemText) {
-            if ($itemText === $item) {
+            if ($this->endsWith($itemText, $item)) {
                 unset($textCollection[$key]);
                 break;
             }
         }
 
         $value->setTextCollection($textCollection);
+    }
+
+    /**
+     * Predicate to know if an $itemText ends by $item
+     *
+     * @param string $itemText
+     * @param string $item
+     *
+     * @return bool
+     */
+    protected function endsWith($itemText, $item)
+    {
+        return substr( $itemText, strlen( $itemText ) - strlen( $item ) ) === $item;
     }
 }
