@@ -94,6 +94,7 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
         $textCollection = $product->getValue('my_images')->getTextCollection();
         $this->assertContains('bar', $textCollection);
         $this->assertContains('http://my_server.com/upload/my_image.jpg', $textCollection);
+        $this->assertContains('foo', $textCollection);
     }
 
     public function testDeleteUrlTextCollectionAttribute()
@@ -112,6 +113,7 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
         $textCollection = $product->getValue('my_images')->getTextCollection();
         $this->assertContains('bar', $textCollection);
         $this->assertContains('foo', $textCollection);
+        $this->assertNotContains('http://my_server.com/upload/my_image.jpg', $textCollection);
     }
 
     /**
