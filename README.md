@@ -29,6 +29,12 @@ and enable the bundle in the `app/AppKernel.php` file in the `registerBundles()`
 
 If your installation is already set up, don't forget to clean your cache in production environment.
 
+Adds routing in `app/config/routing.yml`:
+```
+piivo_api:
+   resource: "@PiivoConnectorBundle/Resources/config/routing.yml"
+   prefix: /api
+```
 
 ### (Optionnal) Example bundles
 
