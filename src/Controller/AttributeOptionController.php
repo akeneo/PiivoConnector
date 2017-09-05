@@ -56,7 +56,7 @@ class AttributeOptionController
      */
     public function deleteItemAction(Request $request, $attributeCode)
     {
-        $item = json_decode($request->get('item'), true);
+        $item = $request->get('item');
 
         $attribute = $this->attributeRepository->findOneByIdentifier($attributeCode);
         if (null === $attribute) {

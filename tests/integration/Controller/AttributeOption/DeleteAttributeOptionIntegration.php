@@ -103,7 +103,7 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
         $client->request(
             'DELETE',
             'api/rest/v1/attributes/my_images/items',
-            ['item' => json_encode('http://my_server.com/upload/my_image.jpg')]
+            ['item' => 'http://my_server.com/upload/my_image.jpg']
         );
 
         $response = $client->getResponse();
