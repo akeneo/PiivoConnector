@@ -57,6 +57,9 @@ class AttributeOptionController
     public function deleteItemAction(Request $request, $attributeCode)
     {
         $item = $request->get('item');
+        error_log("\nDELETE ITEM ACTION\n", 3, '/tmp/test.txt');
+        error_log("------------------\n", 3, '/tmp/test.txt');
+        error_log(print_r($item, true), 3, '/tmp/test.txt');
 
         $attribute = $this->attributeRepository->findOneByIdentifier($attributeCode);
         if (null === $attribute) {
@@ -74,8 +77,11 @@ class AttributeOptionController
         $pqb = $this->pqbFactory->create();
         $pqb->addFilter($attributeCode, Operators::CONTAINS, $item);
         $products = $pqb->execute();
+        error_log(sprintf("\nPRODUCTS %s\n", count($products)), 3, '/tmp/test.txt');
 
         foreach ($products as $product) {
+            error_log(sprintf("Product: '%s'\n", (string) $product), 3, '/tmp/test.txt');
+            error_log(sprintf("Remove product item '%s': '%s'\n", $attributeCode, $item), 3, '/tmp/test.txt');
             $this->removeProductItem($product, $attributeCode, $item);
             $this->productSaver->save($product);
         }
@@ -92,13 +98,22 @@ class AttributeOptionController
     {
         $value = $product->getValue($attributeCode);
         $textCollection = (array) $value->getTextCollection();
+
+        error_log(sprintf("Text collection value: '%s'\n", print_r($textCollection, true)), 3, '/tmp/test.txt');
+        error_log(sprintf("Searching item: '%s'\n", $item), 3, '/tmp/test.txt');
         foreach ($textCollection as $key => $itemText) {
             if ($itemText === $item) {
+                error_log("Found!\n", 3, '/tmp/test.txt');
                 unset($textCollection[$key]);
                 break;
             }
         }
 
-        $value->setTextCollection($textCollection);
+        error_log(sprintf("New text collection value: '%s'\n", print_r($textCollection, true)), 3, '/tmp/test.txt');
+
+        $textCollection = array_values($textCollection);
+        error_log(sprintf("New text collection value: '%s'\n", print_r($textCollection, true)), 3, '/tmp/test.txt');
+
+        $value->setTextCollection(array_values($textCollection));
     }
 }
