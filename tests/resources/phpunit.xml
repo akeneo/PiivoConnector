@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit
-        backupGlobals               = "false"
-        backupStaticAttributes      = "false"
-        colors                      = "true"
-        convertErrorsToExceptions   = "true"
-        convertNoticesToExceptions  = "true"
-        convertWarningsToExceptions = "true"
-        processIsolation            = "false"
-        stopOnFailure               = "false"
-        syntaxCheck                 = "false"
-        bootstrap                   = "bootstrap.php.cache" >
+        backupGlobals="false"
+        backupStaticAttributes="false"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        processIsolation="false"
+        stopOnFailure="false"
+        syntaxCheck="false"
+        bootstrap="./autoload.php">
+
+    <php>
+        <ini name="date.timezone" value="Europe/Paris"/>
+        <ini name="intl.default_locale" value="en"/>
+        <ini name="intl.error_level" value="0"/>
+        <ini name="memory_limit" value="-1"/>
+        <ini name="zend.enable_gc" value="1"/>
+    </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory suffix=".php">../vendor/akeneo/piivo-connector/tests/integration/Controller</directory>
-        </testsuite>
-    </testsuites>
 
+        <testsuite name="Piivo_Api_Bundle_Controllers_Integration_Test">
+            <directory suffix="Integration.php">../vendor/akeneo/piivo-connector/tests/integration/Controller</directory>
+        </testsuite>
+
+    </testsuites>
 </phpunit>

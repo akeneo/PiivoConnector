@@ -121,6 +121,6 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
      */
     protected function getConfiguration()
     {
-        return new Configuration([Configuration::getMinimalCatalogPath()]);
+        return $this->catalog->useMinimalCatalog();
     }
 }
