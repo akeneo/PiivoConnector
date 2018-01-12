@@ -63,10 +63,10 @@ class ListCategoryIntegration extends ApiTestCase
 {
     "_links": {
         "self": {
-            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22EMPTY%22%7D%5D%7D"
+            "href": "http:\/\/localhost\/api\/rest\/v1\/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22EMPTY%22%7D%5D%7D"
         },
         "first": {
-            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22EMPTY%22%7D%5D%7D"
+            "href": "http:\/\/localhost\/api\/rest\/v1\/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22EMPTY%22%7D%5D%7D"
         }
     },
     "current_page": 1,
@@ -75,7 +75,7 @@ class ListCategoryIntegration extends ApiTestCase
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/categories/master"
+                        "href": "http:\/\/localhost\/api\/rest\/v1\/categories\/master"
                     }
                 },
                 "code": "master",
@@ -87,7 +87,7 @@ class ListCategoryIntegration extends ApiTestCase
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/categories/tree1"
+                        "href": "http:\/\/localhost\/api\/rest\/v1\/categories\/tree1"
                     }
                 },
                 "code": "tree1",
@@ -97,7 +97,7 @@ class ListCategoryIntegration extends ApiTestCase
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/categories/tree2"
+                        "href": "http:\/\/localhost\/api\/rest\/v1\/categories\/tree2"
                     }
                 },
                 "code": "tree2",
@@ -123,10 +123,10 @@ JSON;
 {
     "_links": {
         "self": {
-            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22%3D%22%2C+%22value%22%3A%22tree1%22%7D%5D%7D"
+            "href": "http:\/\/localhost\/api\/rest\/v1\/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22%3D%22%2C%20%22value%22%3A%22tree1%22%7D%5D%7D"
         },
         "first": {
-            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22%3D%22%2C+%22value%22%3A%22tree1%22%7D%5D%7D"
+            "href": "http:\/\/localhost\/api\/rest\/v1\/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22%3D%22%2C%20%22value%22%3A%22tree1%22%7D%5D%7D"
         }
     },
     "current_page": 1,
@@ -135,7 +135,7 @@ JSON;
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/categories/parent1"
+                        "href": "http:\/\/localhost\/api\/rest\/v1\/categories\/parent1"
                     }
                 },
                 "code": "parent1",
@@ -145,7 +145,7 @@ JSON;
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/categories/parent2"
+                        "href": "http:\/\/localhost\/api\/rest\/v1\/categories\/parent2"
                     }
                 },
                 "code": "parent2",
@@ -171,10 +171,10 @@ JSON;
 {
     "_links": {
         "self": {
-            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22DESCENDANT%22%2C+%22value%22%3A%22tree1%22%7D%5D%7D"
+            "href": "http:\/\/localhost\/api\/rest\/v1\/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22DESCENDANT%22%2C%20%22value%22%3A%22tree1%22%7D%5D%7D"
         },
         "first": {
-            "href": "http://localhost/api/rest/v1/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22DESCENDANT%22%2C+%22value%22%3A%22tree1%22%7D%5D%7D"
+            "href": "http:\/\/localhost\/api\/rest\/v1\/categories?page=1&limit=10&with_count=false&search=%7B%22parent%22%3A%5B%7B%22operator%22%3A%22DESCENDANT%22%2C%20%22value%22%3A%22tree1%22%7D%5D%7D"
         }
     },
     "current_page": 1,
@@ -183,7 +183,7 @@ JSON;
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/categories/parent1"
+                        "href": "http:\/\/localhost\/api\/rest\/v1\/categories\/parent1"
                     }
                 },
                 "code": "parent1",
@@ -193,7 +193,7 @@ JSON;
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/categories/leaf1"
+                        "href": "http:\/\/localhost\/api\/rest\/v1\/categories\/leaf1"
                     }
                 },
                 "code": "leaf1",
@@ -203,7 +203,7 @@ JSON;
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/categories/parent2"
+                        "href": "http:\/\/localhost\/api\/rest\/v1\/categories\/parent2"
                     }
                 },
                 "code": "parent2",
@@ -213,7 +213,7 @@ JSON;
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/categories/leaf2"
+                        "href": "http:\/\/localhost\/api\/rest\/v1\/categories\/leaf2"
                     }
                 },
                 "code": "leaf2",

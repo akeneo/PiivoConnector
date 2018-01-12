@@ -91,10 +91,10 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $product = $this->get('pim_catalog.repository.product')->findOneByIdentifier('my_sku');
-        $textCollection = $product->getValue('my_images')->getTextCollection();
+        $textCollection = $product->getValue('my_images')->getData();
         $this->assertContains('bar', $textCollection);
         $this->assertContains('http://my_server.com/upload/my_image.jpg', $textCollection);
-        $this->assertContains('foo', $textCollection);
+        $this->assertNotContains('foo', $textCollection);
     }
 
     public function testDeleteUrlTextCollectionAttribute()
@@ -110,7 +110,7 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
 
         $product = $this->get('pim_catalog.repository.product')->findOneByIdentifier('my_sku');
-        $textCollection = $product->getValue('my_images')->getTextCollection();
+        $textCollection = $product->getValue('my_images')->getData();
         $this->assertContains('bar', $textCollection);
         $this->assertContains('foo', $textCollection);
         $this->assertNotContains('http://my_server.com/upload/my_image.jpg', $textCollection);

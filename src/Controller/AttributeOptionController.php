@@ -3,6 +3,7 @@
 namespace Piivo\Bundle\ConnectorBundle\Controller;
 
 use Pim\Bundle\CatalogBundle\Doctrine\Common\Saver\ProductSaver;
+use Pim\Component\Catalog\Model\EntityWithValuesInterface;
 use Pim\Component\Catalog\Model\ProductInterface;
 use Pim\Component\Catalog\Query\Filter\Operators;
 use Pim\Component\Catalog\Query\ProductQueryBuilderFactoryInterface;
@@ -91,16 +92,6 @@ class AttributeOptionController
     protected function removeProductItem(ProductInterface $product, $attributeCode, $item)
     {
         $value = $product->getValue($attributeCode);
-        $textCollection = (array) $value->getTextCollection();
-
-        foreach ($textCollection as $key => $itemText) {
-            if ($itemText === $item) {
-                unset($textCollection[$key]);
-                break;
-            }
-        }
-
-        $textCollection = array_values($textCollection);
-        $value->setTextCollection(array_values($textCollection));
+        $value->removeItem($item);
     }
 }

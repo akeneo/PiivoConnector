@@ -110,7 +110,8 @@ class ListAttributeIntegration extends ApiTestCase
                 "sort_order"             : 0,
                 "localizable"            : false,
                 "scopable"               : false,
-                "labels"                 : {}
+                "labels"                 : {},
+                "auto_option_sorting"    : null
             },{
                 "_links": {
                     "self": {
@@ -142,7 +143,8 @@ class ListAttributeIntegration extends ApiTestCase
                 "sort_order"             : 0,
                 "localizable"            : false,
                 "scopable"               : false,
-                "labels"                 : {}
+                "labels"                 : {},
+                "auto_option_sorting"    : null
             }
         ]
     }
@@ -203,7 +205,8 @@ JSON;
                 "sort_order"             : 0,
                 "localizable"            : false,
                 "scopable"               : false,
-                "labels"                 : {}
+                "labels"                 : {},
+                "auto_option_sorting"    : null
             },{
                 "_links": {
                     "self": {
@@ -235,7 +238,8 @@ JSON;
                 "sort_order"             : 0,
                 "localizable"            : false,
                 "scopable"               : false,
-                "labels"                 : {}
+                "labels"                 : {},
+                "auto_option_sorting"    : null
             }
         ]
     }
@@ -305,7 +309,8 @@ JSON;
                 "sort_order"             : 0,
                 "localizable"            : false,
                 "scopable"               : false,
-                "labels"                 : {}
+                "labels"                 : {},
+                "auto_option_sorting"    : null
             },{
                 "_links": {
                     "self": {
@@ -337,7 +342,8 @@ JSON;
                 "sort_order"             : 0,
                 "localizable"            : false,
                 "scopable"               : false,
-                "labels"                 : {}
+                "labels"                 : {},
+                "auto_option_sorting"    : null
             },{
                 "_links": {
                     "self": {
@@ -369,7 +375,8 @@ JSON;
                 "sort_order"             : 0,
                 "localizable"            : false,
                 "scopable"               : false,
-                "labels"                 : {}
+                "labels"                 : {},
+                "auto_option_sorting"    : null
             },{
                 "_links": {
                     "self": {
@@ -401,7 +408,8 @@ JSON;
                 "sort_order"             : 0,
                 "localizable"            : false,
                 "scopable"               : false,
-                "labels"                 : {}
+                "labels"                 : {},
+                "auto_option_sorting"    : null
             },{
                 "_links": {
                     "self": {
@@ -433,7 +441,8 @@ JSON;
                 "sort_order"             : 0,
                 "localizable"            : false,
                 "scopable"               : false,
-                "labels"                 : {}
+                "labels"                 : {},
+                "auto_option_sorting"    : null
             },{
                 "_links": {
                     "self": {
@@ -467,7 +476,8 @@ JSON;
                 "scopable"               : false,
                 "labels"                 : {
                     "en_US": "SKU"
-                }
+                },
+                "auto_option_sorting"    : null
             }
         ]
     }
