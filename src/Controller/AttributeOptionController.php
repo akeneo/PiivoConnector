@@ -2,12 +2,13 @@
 
 namespace Piivo\Bundle\ConnectorBundle\Controller;
 
+use Akeneo\Component\StorageUtils\Saver\SaverInterface;
 use Pim\Bundle\CatalogBundle\Doctrine\Common\Saver\ProductSaver;
-use Pim\Component\Catalog\Model\EntityWithValuesInterface;
 use Pim\Component\Catalog\Model\ProductInterface;
 use Pim\Component\Catalog\Query\Filter\Operators;
 use Pim\Component\Catalog\Query\ProductQueryBuilderFactoryInterface;
 use Pim\Component\Catalog\Repository\AttributeRepositoryInterface;
+use PimEnterprise\Bundle\CatalogBundle\Security\Doctrine\Common\Saver\FilteredEntitySaver;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -34,13 +35,13 @@ class AttributeOptionController
 
     /**
      * @param ProductQueryBuilderFactoryInterface $pqbFactory
-     * @param ProductSaver $productSaver
+     * @param SaverInterface $productSaver
      * @param AttributeRepositoryInterface $attributeRepository
      * @param array $apiConfiguration
      */
     public function __construct(
         ProductQueryBuilderFactoryInterface $pqbFactory,
-        ProductSaver $productSaver,
+        FilteredEntitySaver $productSaver,
         AttributeRepositoryInterface $attributeRepository,
         array $apiConfiguration
     ) {
