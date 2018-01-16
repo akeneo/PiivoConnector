@@ -11,8 +11,8 @@ services:
             - '@pim_catalog.repository.attribute'
             - '%pim_api.configuration%'
 
-    piivo_connector.controller.attribute_option:
-        class: Piivo\Bundle\ConnectorBundle\Controller\AttributeOptionController
+    piivo_connector.controller.text_collection_value:
+        class: Piivo\Bundle\ConnectorBundle\Controller\TextCollectionValueController
         arguments:
             - '@pim_catalog.query.product_model_query_builder_factory'
             - '@pim_catalog.saver.product_model'

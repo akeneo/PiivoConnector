@@ -5,5 +5,5 @@ piivo_api_version_deleted_list:
 
 piivo_api_text_collection_item_delete:
     path: /rest/v1/attributes/{attributeCode}/items
-    defaults: { _controller: piivo_connector.controller.attribute_option:deleteItemAction, _format: json }
+    defaults: { _controller: piivo_connector.controller.text_collection_value:deleteItemAction, _format: json }
     methods: [DELETE]

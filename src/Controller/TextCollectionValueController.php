@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2017 Akeneo SAS (http://www.akeneo.com)
  */
-class AttributeOptionController
+class TextCollectionValueController
 {
     /** @var ProductQueryBuilderFactoryInterface */
     protected $productModelQueryBuilderFactory;
