@@ -3,28 +3,32 @@
 namespace Piivo\Bundle\ConnectorBundle\Controller;
 
 use Akeneo\Component\StorageUtils\Saver\SaverInterface;
-use Pim\Bundle\CatalogBundle\Doctrine\Common\Saver\ProductSaver;
-use Pim\Component\Catalog\Model\ProductInterface;
+use Pim\Component\Catalog\Model\EntityWithValuesInterface;
 use Pim\Component\Catalog\Query\Filter\Operators;
 use Pim\Component\Catalog\Query\ProductQueryBuilderFactoryInterface;
 use Pim\Component\Catalog\Repository\AttributeRepositoryInterface;
-use PimEnterprise\Bundle\CatalogBundle\Security\Doctrine\Common\Saver\FilteredEntitySaver;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
 /**
- *
  * @author    Romain Monceau <romain@akeneo.com>
  * @copyright 2017 Akeneo SAS (http://www.akeneo.com)
  */
 class AttributeOptionController
 {
     /** @var ProductQueryBuilderFactoryInterface */
-    protected $pqbFactory;
+    protected $productModelQueryBuilderFactory;
 
-    /** @var ProductSaver */
+    /** @var SaverInterface */
+    protected $productModelSaver;
+
+    /** @var ProductQueryBuilderFactoryInterface */
+    protected $productQueryBuilderFactory;
+
+    /** @var SaverInterface */
     protected $productSaver;
 
     /** @var AttributeRepositoryInterface */
@@ -34,21 +38,27 @@ class AttributeOptionController
     protected $apiConfiguration;
 
     /**
-     * @param ProductQueryBuilderFactoryInterface $pqbFactory
+     * @param ProductQueryBuilderFactoryInterface $productModelQueryBuilderFactory
+     * @param SaverInterface $productModelSaver
+     * @param ProductQueryBuilderFactoryInterface $productQueryBuilderFactory
      * @param SaverInterface $productSaver
      * @param AttributeRepositoryInterface $attributeRepository
      * @param array $apiConfiguration
      */
     public function __construct(
-        ProductQueryBuilderFactoryInterface $pqbFactory,
-        FilteredEntitySaver $productSaver,
+        ProductQueryBuilderFactoryInterface $productModelQueryBuilderFactory,
+        SaverInterface $productModelSaver,
+        ProductQueryBuilderFactoryInterface $productQueryBuilderFactory,
+        SaverInterface $productSaver,
         AttributeRepositoryInterface $attributeRepository,
         array $apiConfiguration
     ) {
-        $this->pqbFactory          = $pqbFactory;
-        $this->productSaver        = $productSaver;
+        $this->productModelQueryBuilderFactory = $productModelQueryBuilderFactory;
+        $this->productModelSaver = $productModelSaver;
+        $this->productQueryBuilderFactory = $productQueryBuilderFactory;
+        $this->productSaver = $productSaver;
         $this->attributeRepository = $attributeRepository;
-        $this->apiConfiguration    = $apiConfiguration;
+        $this->apiConfiguration = $apiConfiguration;
     }
 
     /**
@@ -73,24 +83,33 @@ class AttributeOptionController
             );
         }
 
+        $pmqb = $this->pmqbFactory->create();
+        $pmqb->addFilter($attributeCode, Operators::CONTAINS, $item);
+        $productModels = $pmqb->execute();
+
+        foreach ($productModels as $productModel) {
+            $this->removeItemFromTextCollection($productModel, $attributeCode, $item);
+            $this->productModelSaver->save($productModel);
+        }
+
         $pqb = $this->pqbFactory->create();
         $pqb->addFilter($attributeCode, Operators::CONTAINS, $item);
         $products = $pqb->execute();
 
         foreach ($products as $product) {
-            $this->removeProductItem($product, $attributeCode, $item);
+            $this->removeItemFromTextCollection($product, $attributeCode, $item);
             $this->productSaver->save($product);
         }
 
-        return new JsonResponse();
+        return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
-     * @param ProductInterface $product
+     * @param EntityWithValuesInterface $product
      * @param string $attributeCode
      * @param string $item
      */
-    protected function removeProductItem(ProductInterface $product, $attributeCode, $item)
+    protected function removeItemFromTextCollection(EntityWithValuesInterface $product, $attributeCode, $item)
     {
         $value = $product->getValue($attributeCode);
         $value->removeItem($item);
