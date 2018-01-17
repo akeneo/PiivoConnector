@@ -121,7 +121,7 @@ def runIntegrationTestCe(version) {
                 sh "cat app/AppKernel.php"
 
                 sh "rm ./var/cache/* -rf"
-                sh "./bin/console --env=test pim:install --force"
+                sh "./bin/console --env=test pim:installer:db"
                 sh "mkdir -p app/build/logs/"
                 sh "./vendor/bin/phpunit -c app/ --log-junit app/build/logs/phpunit.xml"
         } finally {
@@ -155,7 +155,7 @@ def runIntegrationTestEe(version) {
                 sh "cat app/AppKernel.php"
 
                 sh "rm ./var/cache/* -rf"
-                sh "./bin/console --env=test pim:install --force"
+                sh "./bin/console --env=test pim:installer:db"
                 sh "mkdir -p app/build/logs/"
                 sh "./vendor/bin/phpunit -c app/ --log-junit app/build/logs/phpunit.xml"
         } finally {

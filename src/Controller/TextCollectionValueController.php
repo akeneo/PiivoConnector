@@ -83,7 +83,7 @@ class TextCollectionValueController
             );
         }
 
-        $pmqb = $this->pmqbFactory->create();
+        $pmqb = $this->productModelQueryBuilderFactory->create();
         $pmqb->addFilter($attributeCode, Operators::CONTAINS, $item);
         $productModels = $pmqb->execute();
 
@@ -92,7 +92,7 @@ class TextCollectionValueController
             $this->productModelSaver->save($productModel);
         }
 
-        $pqb = $this->pqbFactory->create();
+        $pqb = $this->productQueryBuilderFactory->create();
         $pqb->addFilter($attributeCode, Operators::CONTAINS, $item);
         $products = $pqb->execute();
 
