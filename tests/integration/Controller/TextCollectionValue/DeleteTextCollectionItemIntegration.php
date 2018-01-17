@@ -1,12 +1,11 @@
 <?php
 
-namespace Piivo\Bundle\ConnectorBundle\tests\integration\Controller\AttributeOption;
+namespace Piivo\Bundle\ConnectorBundle\tests\integration\Controller\TextCollectionValue;
 
-use Akeneo\Test\Integration\Configuration;
 use Pim\Bundle\ApiBundle\tests\integration\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class DeleteAttributeOptionIntegration extends ApiTestCase
+class DeleteTextCollectionItemIntegration extends ApiTestCase
 {
     /**
      * {@inheritdoc}
@@ -20,6 +19,7 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
             'type' => 'pim_catalog_text_collection'
         ]);
         $this->loadProduct('my_sku');
+
     }
 
     /**
@@ -50,7 +50,7 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
     protected function loadProduct($identifier)
     {
         $product = $this->get('pim_catalog.builder.product')->createProduct($identifier);
-        $textCollection = ['bar', 'foo', 'http://my_server.com/upload/my_image.jpg'];
+        $textCollection = ['bar', 'foo', 'http://my_server.com/upload/my_image.jpg', 'foo'];
 
         $productData = ['my_images' => [['data' => $textCollection, 'locale' => null, 'scope' => null]]];
 
