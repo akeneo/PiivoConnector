@@ -8,7 +8,7 @@ We are trying to create this extension to add more features on the current versi
 
 | PiiVO Connector     | Akeneo PIM Community Edition |
 |:-------------------:|:----------------------------:|
-| v1.1.*              | v2.0.*                       |
+| v1.1.*              | v2.*                         |
 | v1.0.*              | v1.7.*                       |
 
 ## Installation
