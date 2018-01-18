@@ -20,13 +20,12 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "akeneo/pim-community-dev": "1.7.*",
-        "akeneo/extended-attribute-type": "1.1.*"
+        "akeneo/pim-community-dev": "2.0.*",
+        "akeneo/extended-attribute-type": "2.0.*"
     },
     "require-dev": {
-        "phpspec/phpspec": "3.0.0",
         "friendsofphp/php-cs-fixer": "@stable",
-        "phpunit/phpunit": "5.4"
+        "phpunit/phpunit": "@stable"
     },
     "config": {
         "bin-dir": "bin"
