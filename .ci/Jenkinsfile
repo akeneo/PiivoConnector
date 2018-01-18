@@ -9,7 +9,7 @@ def launchIntegrationTests = "yes"
 
 class Globals {
     static pimVersion = "2.0"
-    static extensionBranch = "2.0.x-dev"
+    static extensionBranch = "1.1.x-dev"
 }
 
 stage("Checkout") {

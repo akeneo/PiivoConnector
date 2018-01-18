@@ -8,14 +8,14 @@ We are trying to create this extension to add more features on the current versi
 
 | PiiVO Connector     | Akeneo PIM Community Edition |
 |:-------------------:|:----------------------------:|
-| v2.0.*              | v2.0.*                       |
+| v1.1.*              | v2.0.*                       |
 | v1.0.*              | v1.7.*                       |
 
 ## Installation
 You can install this bundle with composer (see requirements section):
 
 ```bash
-    php composer.phar require akeneo/piivo-connector:2.0.*
+    php composer.phar require akeneo/piivo-connector:1.1.*
 ```
 
 and enable the bundle in the `app/AppKernel.php` file in the `registerBundles()` method:
