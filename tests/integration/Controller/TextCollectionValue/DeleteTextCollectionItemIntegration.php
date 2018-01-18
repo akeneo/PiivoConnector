@@ -19,7 +19,6 @@ class DeleteTextCollectionItemIntegration extends ApiTestCase
             'type' => 'pim_catalog_text_collection'
         ]);
         $this->loadProduct('my_sku');
-
     }
 
     /**

@@ -55,7 +55,8 @@ class VersionRepository extends EntityRepository
         foreach ($criteria as $key => $value) {
             $qb->andWhere(
                 $qb->expr()->gt(
-                    sprintf('r.%s', $key), $qb->expr()->literal($value)
+                    sprintf('r.%s', $key),
+                    $qb->expr()->literal($value)
                 )
             );
         }

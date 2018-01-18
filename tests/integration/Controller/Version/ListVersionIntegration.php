@@ -2,7 +2,6 @@
 
 namespace Piivo\Bundle\ConnectorBundle\tests\integration\Controller\Version;
 
-use Akeneo\Test\Integration\Configuration;
 use Pim\Bundle\ApiBundle\tests\integration\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -3,6 +3,7 @@
 namespace Piivo\Bundle\ConnectorBundle\Controller;
 
 use Akeneo\Component\StorageUtils\Saver\SaverInterface;
+use Pim\Bundle\ExtendedAttributeTypeBundle\Model\TextCollectionValue;
 use Pim\Component\Catalog\Model\EntityWithValuesInterface;
 use Pim\Component\Catalog\Query\Filter\Operators;
 use Pim\Component\Catalog\Query\ProductQueryBuilderFactoryInterface;
@@ -64,7 +65,8 @@ class TextCollectionValueController
     /**
      * @param Request $request
      * @param string $attributeCode
-     * @param string $item
+     *
+     * @return JsonResponse
      */
     public function deleteItemAction(Request $request, $attributeCode)
     {
@@ -111,6 +113,7 @@ class TextCollectionValueController
      */
     protected function removeItemFromTextCollection(EntityWithValuesInterface $product, $attributeCode, $item)
     {
+        /** @var TextCollectionValue $value */
         $value = $product->getValue($attributeCode);
         $value->removeItem($item);
     }
