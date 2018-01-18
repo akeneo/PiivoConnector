@@ -35,5 +35,11 @@
         "psr-4": {
             "Piivo\\Bundle\\ConnectorBundle\\": "src/"
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-1.0": "1.0.x-dev",
+            "dev-master": "2.0.x-dev"
+        }
     }
 }
