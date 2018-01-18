@@ -19,6 +19,7 @@ class DeleteTextCollectionItemIntegration extends ApiTestCase
             'type' => 'pim_catalog_text_collection'
         ]);
         $this->loadProduct('my_sku');
+        sleep(2);
     }
 
     /**
@@ -107,9 +108,9 @@ class DeleteTextCollectionItemIntegration extends ApiTestCase
 
         $response = $client->getResponse();
         $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+
         $product = $this->get('pim_catalog.repository.product')->findOneByIdentifier('my_sku');
         $textCollection = $product->getValue('my_images')->getData();
-
         $this->assertContains('bar', $textCollection);
         $this->assertContains('foo', $textCollection);
         $this->assertNotContains('http://my_server.com/upload/my_image.jpg', $textCollection);
