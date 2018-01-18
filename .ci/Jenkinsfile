@@ -16,7 +16,7 @@ stage("Checkout") {
     milestone 1
     if (env.BRANCH_NAME =~ /^PR-/) {
         userInput = input(message: 'Launch tests?', parameters: [
-            choice(choices: 'yes\nno', description: 'Run unit tests', name: 'launchUnitTests'),
+            choice(choices: 'yes\nno', description: 'Run CS check', name: 'launchCScheck'),
             choice(choices: 'yes\nno', description: 'Run integration tests', name: 'launchIntegrationTests'),
         ])
 
@@ -45,14 +45,9 @@ stage("Checkout") {
     })
 }
 
-if (launchUnitTests.equals("yes")) {
-    stage("Unit tests") {
-        def tasks = [:]
-
-        tasks["phpspec-7.1"] = {runPhpSpecTest(phpVersion)}
-        tasks["php-cs-fixer-7.1"] = {runPhpCsFixerTest(phpVersion)}
-
-        parallel tasks
+if (launchCScheck.equals("yes")) {
+    stage("CS check") {
+        runPhpCsFixerTest(phpVersion)
     }
 }
 
@@ -65,21 +60,6 @@ if (launchIntegrationTests.equals("yes")) {
 
         parallel tasks
     }
-}
-
-def runPhpSpecTest(version) {
-    podPHP(version, {
-        try {
-            unstash "piivo"
-
-            sh "composer install --optimize-autoloader --no-interaction --no-progress --prefer-dist"
-            sh "mkdir -p aklogs/"
-            sh "./vendor/bin/phpspec run --no-interaction --format=junit > aklogs/phpspec.xml"
-        } finally {
-            sh "sed -i \"s/testcase name=\\\"/testcase name=\\\"[php-${version}] /\" aklogs/*.xml"
-            junit "aklogs/*.xml"
-        }
-    })
 }
 
 def runPhpCsFixerTest(version) {
@@ -144,7 +124,7 @@ def runIntegrationTestEe(version) {
                 }
                 sh 'composer dump-autoload -o'
 
-                sh "cp vendor/akeneo/piivo-connector/tests/resources/parameters_test.yml app/config/parameters_test_ee.yml"
+                sh "cp vendor/akeneo/piivo-connector/tests/resources/parameters_test_ee.yml app/config/parameters_test.yml"
                 sh "cp vendor/akeneo/piivo-connector/tests/resources/phpunit.xml app/phpunit.xml"
                 sh "cat vendor/akeneo/piivo-connector/tests/resources/routing.yml >> app/config/routing.yml"
 
