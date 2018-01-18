@@ -1,12 +1,11 @@
 <?php
 
-namespace Piivo\Bundle\ConnectorBundle\tests\integration\Controller\AttributeOption;
+namespace Piivo\Bundle\ConnectorBundle\tests\integration\Controller\TextCollectionValue;
 
-use Akeneo\Test\Integration\Configuration;
 use Pim\Bundle\ApiBundle\tests\integration\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class DeleteAttributeOptionIntegration extends ApiTestCase
+class DeleteTextCollectionItemIntegration extends ApiTestCase
 {
     /**
      * {@inheritdoc}
@@ -20,6 +19,7 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
             'type' => 'pim_catalog_text_collection'
         ]);
         $this->loadProduct('my_sku');
+        sleep(2);
     }
 
     /**
@@ -50,7 +50,7 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
     protected function loadProduct($identifier)
     {
         $product = $this->get('pim_catalog.builder.product')->createProduct($identifier);
-        $textCollection = ['bar', 'foo', 'http://my_server.com/upload/my_image.jpg'];
+        $textCollection = ['bar', 'foo', 'http://my_server.com/upload/my_image.jpg', 'foo'];
 
         $productData = ['my_images' => [['data' => $textCollection, 'locale' => null, 'scope' => null]]];
 
@@ -88,13 +88,13 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
         );
 
         $response = $client->getResponse();
-        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
 
         $product = $this->get('pim_catalog.repository.product')->findOneByIdentifier('my_sku');
-        $textCollection = $product->getValue('my_images')->getTextCollection();
+        $textCollection = $product->getValue('my_images')->getData();
         $this->assertContains('bar', $textCollection);
         $this->assertContains('http://my_server.com/upload/my_image.jpg', $textCollection);
-        $this->assertContains('foo', $textCollection);
+        $this->assertNotContains('foo', $textCollection);
     }
 
     public function testDeleteUrlTextCollectionAttribute()
@@ -107,10 +107,10 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
         );
 
         $response = $client->getResponse();
-        $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertSame(Response::HTTP_NO_CONTENT, $response->getStatusCode());
 
         $product = $this->get('pim_catalog.repository.product')->findOneByIdentifier('my_sku');
-        $textCollection = $product->getValue('my_images')->getTextCollection();
+        $textCollection = $product->getValue('my_images')->getData();
         $this->assertContains('bar', $textCollection);
         $this->assertContains('foo', $textCollection);
         $this->assertNotContains('http://my_server.com/upload/my_image.jpg', $textCollection);
@@ -121,6 +121,6 @@ class DeleteAttributeOptionIntegration extends ApiTestCase
      */
     protected function getConfiguration()
     {
-        return new Configuration([Configuration::getMinimalCatalogPath()]);
+        return $this->catalog->useMinimalCatalog();
     }
 }

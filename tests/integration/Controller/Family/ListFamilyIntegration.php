@@ -2,7 +2,6 @@
 
 namespace Piivo\Bundle\ConnectorBundle\tests\integration\Controller\Family;
 
-use Akeneo\Test\Integration\Configuration;
 use Pim\Bundle\ApiBundle\tests\integration\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -67,10 +66,10 @@ class ListFamilyIntegration extends ApiTestCase
 {
     "_links": {
         "self": {
-            "href": "http://localhost/api/rest/v1/families?page=1&limit=10&with_count=false&%s"
+            "href": "http:\/\/localhost\/api\/rest\/v1\/families?page=1&limit=10&with_count=false&%s"
         },
         "first": {
-            "href": "http://localhost/api/rest/v1/families?page=1&limit=10&with_count=false&%s"
+            "href": "http:\/\/localhost\/api\/rest\/v1\/families?page=1&limit=10&with_count=false&%s"
         }
     },
     "current_page": 1,
@@ -79,26 +78,28 @@ class ListFamilyIntegration extends ApiTestCase
             {
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/families/shoes_family"
+                        "href": "http:\/\/localhost\/api\/rest\/v1\/families\/shoes_family"
                     }
                 },
                 "code"                   : "shoes_family",
-                "labels"                 : {},
+                "labels"                 : [],
                 "attributes"             : ["sku"],
                 "attribute_as_label"     : "sku",
+                "attribute_as_image"     : null,
                 "attribute_requirements" : {
                     "ecommerce": ["sku"]
                 }
             },{
                 "_links": {
                     "self": {
-                        "href": "http://localhost/api/rest/v1/families/tshirt_family"
+                        "href": "http:\/\/localhost\/api\/rest\/v1\/families\/tshirt_family"
                     }
                 },
                 "code"                   : "tshirt_family",
-                "labels"                 : {},
+                "labels"                 : [],
                 "attributes"             : ["sku"],
                 "attribute_as_label"     : "sku",
+                "attribute_as_image"     : null,
                 "attribute_requirements" : {
                     "ecommerce": ["sku"]
                 }
@@ -121,6 +122,6 @@ JSON;
      */
     protected function getConfiguration()
     {
-        return new Configuration([Configuration::getMinimalCatalogPath()]);
+        return $this->catalog->useMinimalCatalog();
     }
 }

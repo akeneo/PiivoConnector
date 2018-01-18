@@ -2,7 +2,6 @@
 
 namespace Piivo\Bundle\ConnectorBundle\tests\integration\Controller\Version;
 
-use Akeneo\Test\Integration\Configuration;
 use Pim\Bundle\ApiBundle\tests\integration\ApiTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -295,6 +294,6 @@ JSON;
      */
     protected function getConfiguration()
     {
-        return new Configuration([Configuration::getMinimalCatalogPath()]);
+        return $this->catalog->useMinimalCatalog();
     }
 }

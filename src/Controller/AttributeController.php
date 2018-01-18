@@ -5,7 +5,6 @@ namespace Piivo\Bundle\ConnectorBundle\Controller;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Pim\Bundle\ApiBundle\Controller\AttributeController as BaseApiAttributeController;
 use Pim\Component\Api\Exception\PaginationParametersException;
-use Pim\Component\Catalog\Query\Filter\Operators;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
