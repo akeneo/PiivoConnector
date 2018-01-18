@@ -8,13 +8,14 @@ We are trying to create this extension to add more features on the current versi
 
 | PiiVO Connector     | Akeneo PIM Community Edition |
 |:-------------------:|:----------------------------:|
+| v2.0.*              | v2.0.*                       |
 | v1.0.*              | v1.7.*                       |
 
 ## Installation
 You can install this bundle with composer (see requirements section):
 
 ```bash
-    php composer.phar require akeneo/piivo-connector:1.0.*
+    php composer.phar require akeneo/piivo-connector:2.0.*
 ```
 
 and enable the bundle in the `app/AppKernel.php` file in the `registerBundles()` method:
@@ -36,63 +37,34 @@ piivo_api:
    prefix: /api
 ```
 
-### (Optionnal) Example bundles
+## Elasticsearch indexes
+As explained in the [ExtendedAttributeTypeBundle's README](https://github.com/akeneo/ExtendedAttributeTypeBundle/blob/v2.0.2/README.md),
+you will also have to register the new Elasticsearch configuration files; in `app/config/pim_parameters.yml`, edit the 
+`elasticsearch_index_configuration_files` parameter and add the following values:
 
-This connector is shipped with complete example bundle, especially to override the ProductValue model.
-This is needed to use the new TextCollection attribute type.
-
-The easiest way to enable it is to use a symbolic link:
-
-```
-cd src
-ln -s ../vendor/akeneo/extended-attribute-type/doc/example/Pim Pim
-```
-
-In Community edition,
-After that, you will be able to use the example bundles in `app/AppKernel.php`:
-
-```php
-    protected function registerProjectBundles()
-    {
-        return [
-            new Pim\Bundle\ExtendedAttributeTypeBundle\PimExtendedAttributeTypeBundle(),
-            new Pim\Bundle\PiivoConnectorBundle\PimPiivoConnectorBundle(),
-            new Pim\Bundle\ExtendedCeBundle\ExtendedCeBundle(),   // example CE bundle to activate the extended attributes
-        ];
-    }
+```yaml
+elasticsearch_index_configuration_files:
+    - '%kernel.root_dir%/../vendor/akeneo/pim-community-dev/src/Pim/Bundle/CatalogBundle/Resources/elasticsearch/index_configuration.yml'
+    - '%kernel.root_dir%/../vendor/akeneo/extended-attribute-type/src/Resources/config/elasticsearch/index_configuration.yml'
 ```
 
-```
-akeneo_storage_utils:
-    mapping_overrides:
-        -
-            original: Pim\Component\Catalog\Model\ProductValue
-            override: Pim\Bundle\ExtendedCeBundle\Model\ProductValue
-```
-
-In Enterprise edition:
-After that, you will be able to use the example bundles in `app/AppKernel.php`:
-
-```php
-    protected function registerProjectBundles()
-    {
-        return [
-            new Pim\Bundle\ExtendedAttributeTypeBundle\PimExtendedAttributeTypeBundle(),
-            new Pim\Bundle\PiivoConnectorBundle\PimPiivoConnectorBundle(),
-            new Pim\Bundle\ExtendedEeBundle\ExtendedEeBundle(), // example EE bundle to activate the extended attributes
-        ];
-    }
+For the Enterprise edition, there is another file to register:
+```yaml
+elasticsearch_index_configuration_files:
+    - '%kernel.root_dir%/../vendor/akeneo/pim-community-dev/src/Pim/Bundle/CatalogBundle/Resources/elasticsearch/index_configuration.yml'
+    - '%kernel.root_dir%/../vendor/akeneo/pim-enterprise-dev/src/PimEnterprise/Bundle/WorkflowBundle/Resources/elasticsearch/index_configuration.yml'
+    - '%kernel.root_dir%/../vendor/akeneo/extended-attribute-type/src/Resources/config/elasticsearch/index_configuration.yml'
+    - '%kernel.root_dir%/../vendor/akeneo/extended-attribute-type/src/Resources/config/elasticsearch/index_configuration_ee.yml'    
 ```
 
+If this is a fresh install, you can then proceed with a standard installation.
+
+From an existing PIM, on the other hand, you will have to re-create your elasticsearch indexes:
 ```
-akeneo_storage_utils:
-    mapping_overrides:
-        -
-            original: PimEnterprise\Component\Catalog\Model\ProductValue
-            override: Pim\Bundle\ExtendedEeBundle\Model\ProductValue
-        -
-            original: PimEnterprise\Component\Workflow\Model\PublishedProductValue
-            override: Pim\Bundle\ExtendedEeBundle\Model\PublishedProductValue
+    php bin/console cache:clear --no-warmup --env=prod
+    php bin/console akeneo:elasticsearch:reset-indexes --env=prod
+    php bin/console pim:product-model:index --all --env=prod
+    php bin/console pim:product:index --all --env=prod
 ```
 
 ## Documentation
