@@ -16,7 +16,7 @@ stage("Checkout") {
     milestone 1
     if (env.BRANCH_NAME =~ /^PR-/) {
         userInput = input(message: 'Launch tests?', parameters: [
-            choice(choices: 'yes\nno', description: 'Run CS check', name: 'launchCScheck'),
+            choice(choices: 'yes\nno', description: 'Run unit tests', name: 'launchUnitTests'),
             choice(choices: 'yes\nno', description: 'Run integration tests', name: 'launchIntegrationTests'),
         ])
 
@@ -45,8 +45,8 @@ stage("Checkout") {
     })
 }
 
-if (launchCScheck.equals("yes")) {
-    stage("CS check") {
+if (launchUnitTests.equals("yes")) {
+    stage("Unit tests") {
         runPhpCsFixerTest(phpVersion)
     }
 }
