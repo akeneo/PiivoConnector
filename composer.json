@@ -19,7 +19,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "akeneo/pim-community-dev": "2.0.*",
+        "akeneo/pim-community-dev": "^2.0",
         "akeneo/extended-attribute-type": "^2.0.2"
     },
     "require-dev": {
