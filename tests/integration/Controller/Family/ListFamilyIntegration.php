@@ -82,7 +82,7 @@ class ListFamilyIntegration extends ApiTestCase
                     }
                 },
                 "code"                   : "shoes_family",
-                "labels"                 : [],
+                "labels"                 : {},
                 "attributes"             : ["sku"],
                 "attribute_as_label"     : "sku",
                 "attribute_as_image"     : null,
@@ -96,7 +96,7 @@ class ListFamilyIntegration extends ApiTestCase
                     }
                 },
                 "code"                   : "tshirt_family",
-                "labels"                 : [],
+                "labels"                 : {},
                 "attributes"             : ["sku"],
                 "attribute_as_label"     : "sku",
                 "attribute_as_image"     : null,
