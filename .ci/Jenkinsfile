@@ -34,7 +34,6 @@ def installExtension(pimEdition, extensionPath) {
     sh """
         cat ${extensionPath}/tests/resources/routing.yml >> app/config/routing.yml
         cp ${extensionPath}/tests/resources/phpunit.xml app/phpunit.xml
-        cp app/config/parameters_test.yml app/config/parameters.yml
         sed -i 's#// your app bundles should be registered here#\\0\\nnew Piivo\\\\Bundle\\\\ConnectorBundle\\\\PiivoConnectorBundle(),#' app/AppKernel.php
         sed -i 's#// your app bundles should be registered here#\\0\\nnew Pim\\\\Bundle\\\\ExtendedAttributeTypeBundle\\\\PimExtendedAttributeTypeBundle(),#' app/AppKernel.php
         rm ./var/cache/* -rf
