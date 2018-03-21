@@ -224,8 +224,7 @@ EOL;
     public function testListLastUpdatedAttributes()
     {
         $client = $this->createAuthenticatedClient();
-        $datetime = new \DateTime('yesterday');
-        $dateString = $datetime->format(\DateTime::ISO8601);
+        $dateString = '2018-03-07T00:00:00+0100';
 
         $searchParameters = json_encode(
             [
